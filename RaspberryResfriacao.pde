@@ -8,6 +8,9 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+String mensagem = ""; // Variável para armazenar a mensagem de sucesso
+int mensagemTimeout = 0; // Tempo restante para exibir a mensagem
+
 PImage img1, img2, img3, img4;  // Variáveis para armazenar as imagens
 long lastUpdateTime = 0; // Tempo da última atualização
 int updateInterval = 2000;  // Intervalo para atualizar as imagens (1 segundo)
@@ -18,10 +21,10 @@ String[] palavras = {"Air Out", "Air In", "Condenser Fan", "Condenser Assy", "Ai
 "Air Out", "Temp In", "Temp Out", "Air In", "In", "Out", "Freon Out", "Freon In", "Suction - Gasous Freon", "Pressure - Gaseous Freon", " Pressure - Liquid Freon "};
 PVector[] posicoes;
 
-String caminhoImagem1 = "C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem.png";
-String caminhoImagem2 = "C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem2.png";
-String caminhoImagem3 = "C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem3.png";
-String caminhoImagem4 = "C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\FotoMalha.png";
+String caminhoImagem1 = "C:\\ProgJean\\RaspberryResfriacao\\assets\\images\\imagem.png";
+String caminhoImagem2 = "C:\\ProgJean\\RaspberryResfriacao\\assets\\images\\imagem2.png";
+String caminhoImagem3 = "C:\\ProgJean\\RaspberryResfriacao\\assets\\images\\imagem3.png";
+String caminhoImagem4 = "C:\\ProgJean\\RaspberryResfriacao\\assets\\images\\FotoMalha.png";
 
 long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios
 int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (2 segundos)
@@ -171,6 +174,16 @@ void draw() {
     lastMockUpdateTime = millis(); // Atualiza o tempo de última atualização
   }
   
+  if (mensagemTimeout > 0) {
+    pushStyle(); // Salva o estilo atual
+    fill(0, 255, 0);
+    textSize(20);
+    textAlign(RIGHT, TOP);
+    text(mensagem, width - 10, 10);
+    popStyle(); // Restaura o estilo anterior
+    mensagemTimeout--;
+}
+  
   drawPalavras();
   drawSaveButton();
   
@@ -277,7 +290,7 @@ void mousePressed() {
     // Detecta qual campo de entrada foi clicado
     if (mouseX > 60 && mouseX < 160 && mouseY > 295 && mouseY < 315) {
       currentInput = 0; // Campo userInput1
-    } else if (mouseX > 200 && mouseX < 307 && mouseY > 355 && mouseY < 375) {
+    } else if (mouseX > 190 && mouseX < 307 && mouseY > 340 && mouseY < 390) {
       currentInput = 1; // Campo userInput2
     } else if (mouseX > 1000 && mouseX < 1100 && mouseY > 390 && mouseY < 405) {
       currentInput = 2; // Campo userInput3
@@ -325,39 +338,42 @@ void keyPressed() {
   }
 }
 
+//bom, alterar apenas para tirar a foto da malha
+
 void saveWithTimestamp() {
   // Gera o timestamp para criar uma pasta única
   String timestamp = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss").format(new Date());
   String folderPath = "C:\\ProgJean\\RaspberryResfriacao\\ScrenShots\\Registros\\" + timestamp;
   new File(folderPath).mkdir(); // Cria a pasta com o timestamp
 
-  // Caminhos das imagens
-  String caminhoImagem1 = folderPath + "\\imagem1.png";
-  String caminhoImagem2 = folderPath + "\\imagem2.png";
-  String caminhoImagem3 = folderPath + "\\imagem3.png";
+  // Salvando cada imagem com sua legenda
+  salvarImagemComLegenda(img1, userInput1, folderPath + "\\imagem1.png");
+  salvarImagemComLegenda(img2, userInput2, folderPath + "\\imagem2.png");
+  salvarImagemComLegenda(img3, userInput3, folderPath + "\\imagem3.png");
+  save(folderPath + "\\Malha.png");
 
-
-  // Salva o canvas com os indicadores desenhados
-  save(folderPath + "\\TelaComIndicadores.png");
-
-  // Copia as imagens base para a pasta criada
-  copiarArquivo("C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem.png", caminhoImagem1);
-  copiarArquivo("C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem2.png", caminhoImagem2);
-  copiarArquivo("C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem3.png", caminhoImagem3);
-
-  println("Imagens e canvas salvos em: " + folderPath);
+  println("Imagens salvas com legendas em: " + folderPath);
+  mensagem = "Imagens geradas com sucesso.";
+  mensagemTimeout = 50; // Número de frames que a mensagem será exibida (ajuste conforme necessário)
 }
 
-// Função para copiar arquivos
-void copiarArquivo(String origem, String destino) {
-  try {
-    java.nio.file.Files.copy(
-      java.nio.file.Paths.get(origem),
-      java.nio.file.Paths.get(destino),
-      java.nio.file.StandardCopyOption.REPLACE_EXISTING
-    );
-    println("Arquivo copiado: " + destino);
-  } catch (IOException e) {
-    println("Erro ao copiar arquivo: " + e.getMessage());
-  }
+// Função para salvar uma imagem com uma legenda
+void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
+  // Adiciona o prefixo "SN: " à legenda
+  String legendaComPrefixo = "SN: " + legenda;
+
+  // Cria um novo canvas com a imagem e espaço extra para a legenda
+  PGraphics canvas = createGraphics(img.width, img.height + 30); // 30px para a legenda
+  canvas.beginDraw();
+  canvas.image(img, 0, 0); // Desenha a imagem no canvas
+
+  // Adiciona a legenda
+  canvas.fill(255); // Cor do texto (preto)
+  canvas.textSize(16);
+  canvas.textAlign(CENTER, CENTER);
+  canvas.text(legendaComPrefixo, img.width / 2, img.height + 15); // Legenda centralizada abaixo da imagem
+  canvas.endDraw();
+
+  // Salva a imagem com a legenda
+  canvas.save(caminhoSaida);
 }
