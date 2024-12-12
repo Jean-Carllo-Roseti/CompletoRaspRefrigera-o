@@ -103,7 +103,7 @@ def plotar_diagrama_mollier(conjunto_dados=5):
 
 
     plt.grid(True)
-    caminho_imagem = r'C:\ProgJean\RaspberryResfriacao\assets\images\imagem3.png'
+    caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem3.png'
     plot.savefig(caminho_imagem)
     plt.close('all')  # Libera os recursos de plotagem
 

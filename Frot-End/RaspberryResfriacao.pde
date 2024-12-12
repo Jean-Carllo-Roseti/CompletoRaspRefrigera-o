@@ -1,16 +1,23 @@
 import java.text.SimpleDateFormat; // Para formatação de data
 import java.util.Date; // Para obter a data atual
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+
+
+String mensagem = ""; // Variável para armazenar a mensagem de sucesso
+int mensagemTimeout = 0; // Tempo restante para exibir a mensagem
 
 PImage img1, img2, img3, img4;  // Variáveis para armazenar as imagens
 long lastUpdateTime = 0; // Tempo da última atualização
-int updateInterval = 2000;  // Intervalo para atualizar as imagens (1 segundo)
+int updateInterval = 2100;  // Intervalo para atualizar as imagens (1 segundo)
 
 
 String[] palavras = {"Air Out", "Air In", "Condenser Fan", "Condenser Assy", "Air In", "P2, P3, P4, P6, P8: SB69-500V", "P1, P7, P5, P9: SB69-100V",
@@ -18,16 +25,19 @@ String[] palavras = {"Air Out", "Air In", "Condenser Fan", "Condenser Assy", "Ai
 "Air Out", "Temp In", "Temp Out", "Air In", "In", "Out", "Freon Out", "Freon In", "Suction - Gasous Freon", "Pressure - Gaseous Freon", " Pressure - Liquid Freon "};
 PVector[] posicoes;
 
-String caminhoImagem1 = "C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem.png";
-String caminhoImagem2 = "C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem2.png";
-String caminhoImagem3 = "C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem3.png";
-String caminhoImagem4 = "C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\FotoMalha.png";
+String caminhoImagem1 = "/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem.png";
+String caminhoImagem2 = "/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem2.png";
+String caminhoImagem3 = "/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem3.png";
+String caminhoImagem4 = "/home/avionics/Desktop/RaspberryResfriacao/assets/images/FotoMalha.png";
 
-long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios
+long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios PARA DADOS MOCADOS, TEST.
 int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (2 segundos)
 
+long lastReadDataTime = 0; // Tempo da última execução da função readDataFromFile PARA DADOS REAIS
+int readDataInterval = 2000; // Intervalo para chamar a função (5 segundos, por exemplo)
 
-float[] temperatures = new float[26]; // Array para armazenar temperaturas
+
+float[] temperatures = new float[25]; // Array para armazenar temperaturas
 float[] pressures = new float[9]; // Array para armazenar pressões
 
 String userInput1 = "";
@@ -48,6 +58,8 @@ void setup() {
   img4 = loadImage(caminhoImagem4);
 
   lastUpdateTime = millis(); // Armazena o tempo inicial de execução
+  readDataFromFile();
+  
   
   posicoes = new PVector[]{
       new PVector(102, 147),  // Air Out BOX 1
@@ -104,59 +116,59 @@ void draw() {
   }
 
   // Desenha as imagens
-  image(img1, 0, 450, 450, 325);  // Imagem 1
-  image(img2, 450, 450, 450, 325); // Imagem 2
-  image(img3, 900, 450, 450, 325); // Imagem 3
+  image(img1, 0, 420, 450, 350);  // Imagem 1
+  image(img2, 450, 420, 450, 350); // Imagem 2
+  image(img3, 900, 420, 450, 350); // Imagem 3
   image(img4, 30, 20, 1300, 400);  // Imagem 4 (não atualiza automaticamente, permanece fixa)
    
       //BOX1
     drawSensorCircle("P5", pressures[4], 190, 127);
     drawSensorCircle("P4", pressures[3], 190, 210);
     
-    drawSensorCircleTemp("T1", temperatures[1], 190, 165);
+    drawSensorCircleTemp("T1", temperatures[0], 190, 165);
     drawSensorCircleTemp("T4", temperatures[2], 80, 130);
     drawSensorCircleTemp("T3", temperatures[3], 80, 160);
-    drawSensorCircleTemp("TEO", temperatures[0], 70, 255);
-    drawSensorCircleTemp("T2", temperatures[0], 190, 245);
+    drawSensorCircleTemp("TEO", temperatures[4], 70, 255);
+    drawSensorCircleTemp("T2", temperatures[1], 190, 245);
   
     // BOX2
     drawSensorCircle("P6", pressures[5], 360, 372);
     drawSensorCircle("P7", pressures[6], 355, 253);
     
-    drawSensorCircleTemp("TEO", temperatures[22], 275, 402);
-    drawSensorCircleTemp("T9", temperatures[6], 425, 315);
-    drawSensorCircleTemp("T8", temperatures[8], 425, 355);
-    drawSensorCircleTemp("T7", temperatures[5], 360, 402);
-    drawSensorCircleTemp("T6", temperatures[7], 355, 288);
+    drawSensorCircleTemp("TEO", temperatures[9], 275, 402);
+    drawSensorCircleTemp("T9", temperatures[8], 425, 315);
+    drawSensorCircleTemp("T8", temperatures[7], 425, 355);
+    drawSensorCircleTemp("T7", temperatures[6], 360, 402);
+    drawSensorCircleTemp("T6", temperatures[5], 355, 288);
   
     // BOX3
     drawSensorCircle("P8", pressures[7], 864, 380);
     drawSensorCircle("P9", pressures[8], 864, 294);
     
-    drawSensorCircleTemp("T12", temperatures[10], 864, 408);
-    drawSensorCircleTemp("T11", temperatures[11], 864, 330); 
-    drawSensorCircleTemp("T14", temperatures[12], 700, 315);
-    drawSensorCircleTemp("T13", temperatures[13], 700, 290);
+    drawSensorCircleTemp("T12", temperatures[11], 864, 408);
+    drawSensorCircleTemp("T11", temperatures[10], 864, 330); 
+    drawSensorCircleTemp("T14", temperatures[13], 700, 315);
+    drawSensorCircleTemp("T13", temperatures[12], 700, 290);
     drawSensorCircleTemp("TEO", temperatures[14], 780, 408);
   
     // BOX4
     drawSensorCircle("P3", pressures[2], 680, 205);
     
     drawSensorCircleTemp("T16", temperatures[15], 920, 213);
-    drawSensorCircleTemp("T18", temperatures[16], 680, 240);
-    drawSensorCircleTemp("T17", temperatures[17], 800, 255);
+    drawSensorCircleTemp("T18", temperatures[17], 680, 240);
+    drawSensorCircleTemp("T17", temperatures[16], 800, 255);
     drawSensorCircleTemp("T19", temperatures[18], 800, 150);
-    drawSensorCircleTemp("TF21", temperatures[19], 1000, 130); //FAN  
+    drawSensorCircleTemp("TF20", temperatures[19], 1000, 130); //FAN  
     
     // LINHAS E EQUIPAMENTOS
     drawSensorCircle("P2", pressures[1], 1040, 185); // SAIDA MOTOR
-    drawSensorCircleTemp("T23", temperatures[21], 1040, 225); //SAIDA MOTOR
+    drawSensorCircleTemp("T23", temperatures[22], 1040, 225); //SAIDA MOTOR
     
     drawSensorCircle("P1", pressures[0], 1040, 250); //MOTOR Entrada 
-    drawSensorCircleTemp("T22", temperatures[20], 1040, 285); //MOTOR entrada
-    drawSensorCircleTemp("TC", temperatures[24], 1220, 260); //TEMP COMPRESSOR
-    drawSensorCircleTemp("TM", temperatures[25], 1160, 135); // TEMP MOTOR
-    drawSensorCircleTemp("T20", temperatures[9], 570, 125);
+    drawSensorCircleTemp("T22", temperatures[21], 1040, 285); //MOTOR entrada
+    drawSensorCircleTemp("TC", temperatures[23], 1220, 260); //TEMP COMPRESSOR
+    drawSensorCircleTemp("TM", temperatures[24], 1160, 135); // TEMP MOTOR
+    drawSensorCircleTemp("T21", temperatures[20], 570, 125);
     
     drawTextInput(userInput1, 60, 295, "SN"); //BOX1
     drawTextInput(userInput2, 207, 365, "SN"); //BOX2
@@ -165,11 +177,27 @@ void draw() {
     drawTextInput(userInput5, 1195, 300, "SN"); //COMPRESSOR
     drawTextInput(userInput6, 995, 95, "SN"); //FAN
     
-    
+  /*
    if (millis() - lastMockUpdateTime > mockUpdateInterval) {
     generateMockData();
     lastMockUpdateTime = millis(); // Atualiza o tempo de última atualização
   }
+  */
+  
+  if (millis() - lastReadDataTime > readDataInterval) {
+    readDataFromFile(); // Chama a função para ler os dados do arquivo
+    lastReadDataTime = millis(); // Atualiza o tempo de última execução
+  }
+  
+  if (mensagemTimeout > 0) {
+    pushStyle(); // Salva o estilo atual
+    fill(0, 255, 0);
+    textSize(20);
+    textAlign(RIGHT, TOP);
+    text(mensagem, width - 10, 10);
+    popStyle(); // Restaura o estilo anterior
+    mensagemTimeout--;
+}
   
   drawPalavras();
   drawSaveButton();
@@ -277,7 +305,7 @@ void mousePressed() {
     // Detecta qual campo de entrada foi clicado
     if (mouseX > 60 && mouseX < 160 && mouseY > 295 && mouseY < 315) {
       currentInput = 0; // Campo userInput1
-    } else if (mouseX > 200 && mouseX < 307 && mouseY > 355 && mouseY < 375) {
+    } else if (mouseX > 190 && mouseX < 307 && mouseY > 340 && mouseY < 390) {
       currentInput = 1; // Campo userInput2
     } else if (mouseX > 1000 && mouseX < 1100 && mouseY > 390 && mouseY < 405) {
       currentInput = 2; // Campo userInput3
@@ -325,39 +353,89 @@ void keyPressed() {
   }
 }
 
+//bom, alterar apenas para tirar a foto da malha
+
 void saveWithTimestamp() {
   // Gera o timestamp para criar uma pasta única
   String timestamp = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss").format(new Date());
-  String folderPath = "C:\\ProgJean\\RaspberryResfriacao\\ScrenShots\\Registros\\" + timestamp;
+  String folderPath = "/home/avionics/Desktop/RaspberryResfriacao/ScrenShots/Registros/" + timestamp;
   new File(folderPath).mkdir(); // Cria a pasta com o timestamp
 
-  // Caminhos das imagens
-  String caminhoImagem1 = folderPath + "\\imagem1.png";
-  String caminhoImagem2 = folderPath + "\\imagem2.png";
-  String caminhoImagem3 = folderPath + "\\imagem3.png";
+  // Salvando cada imagem com sua legenda
+  salvarImagemComLegenda(img1, userInput1, folderPath + "/imagem1.png");
+  salvarImagemComLegenda(img2, userInput2, folderPath + "/imagem2.png");
+  salvarImagemComLegenda(img3, userInput3, folderPath + "/imagem3.png");
+  save(folderPath + "/Malha.png");
 
-
-  // Salva o canvas com os indicadores desenhados
-  save(folderPath + "\\TelaComIndicadores.png");
-
-  // Copia as imagens base para a pasta criada
-  copiarArquivo("C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem.png", caminhoImagem1);
-  copiarArquivo("C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem2.png", caminhoImagem2);
-  copiarArquivo("C:\\ProgJean\\MainFront\\frontend\\src\\assets\\images\\imagem3.png", caminhoImagem3);
-
-  println("Imagens e canvas salvos em: " + folderPath);
+  println("Imagens salvas com legendas em: " + folderPath);
+  mensagem = "Imagens geradas com sucesso.";
+  mensagemTimeout = 50; // Número de frames que a mensagem será exibida (ajuste conforme necessário)
 }
 
-// Função para copiar arquivos
-void copiarArquivo(String origem, String destino) {
+// Função para salvar uma imagem com uma legenda
+void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
+  // Adiciona o prefixo "SN: " à legenda
+  String legendaComPrefixo = "SN: " + legenda;
+
+  // Cria um novo canvas com a imagem e espaço extra para a legenda
+  PGraphics canvas = createGraphics(img.width, img.height + 30); // 30px para a legenda
+  canvas.beginDraw();
+  canvas.image(img, 0, 0); // Desenha a imagem no canvas
+
+  // Adiciona a legenda
+  canvas.fill(255); // Cor do texto (preto)
+  canvas.textSize(16);
+  canvas.textAlign(CENTER, CENTER);
+  canvas.text(legendaComPrefixo, img.width / 2, img.height + 15); // Legenda centralizada abaixo da imagem
+  canvas.endDraw();
+
+  // Salva a imagem com a legenda
+  canvas.save(caminhoSaida);
+}
+
+
+
+void readDataFromFile() {
+  String filePath = "/home/avionics/Desktop/RaspberryResfriacao/valores_sensores.txt";
+
   try {
-    java.nio.file.Files.copy(
-      java.nio.file.Paths.get(origem),
-      java.nio.file.Paths.get(destino),
-      java.nio.file.StandardCopyOption.REPLACE_EXISTING
-    );
-    println("Arquivo copiado: " + destino);
+    BufferedReader reader = new BufferedReader(new FileReader(filePath));
+    String line;
+
+    // Lê as temperaturas
+    line = reader.readLine(); // Lê a primeira linha
+    if (line != null) {
+      String[] values = line.split(","); // Divide a linha em valores
+      for (int j = 0; j < values.length && j < temperatures.length; j++) {
+        try {
+          temperatures[j] = Float.parseFloat(values[j].trim()); // Converte para float
+          println("Temperatura lida: " + temperatures[j]); // Verifica o valor lido
+        } catch (NumberFormatException e) {
+          println("Erro ao converter a temperatura na posição " + j + ": " + values[j]);
+        }
+      }
+    } else {
+      println("Nenhuma linha de temperatura encontrada.");
+    }
+
+    // Lê as pressões
+    line = reader.readLine(); // Lê a próxima linha
+    if (line != null) {
+      String[] values = line.split(","); // Divide a linha em valores
+      for (int i = 0; i < values.length && i < pressures.length; i++) {
+        try {
+          pressures[i] = Float.parseFloat(values[i].trim()); // Converte para float
+          println("Pressão lida: " + pressures[i]); // Verifica o valor lido
+        } catch (NumberFormatException e) {
+          println("Erro ao converter a pressão na posição " + i + ": " + values[i]);
+        }
+      }
+    } else {
+      println("Nenhuma linha de pressão encontrada.");
+    }
+
+    reader.close();
   } catch (IOException e) {
-    println("Erro ao copiar arquivo: " + e.getMessage());
+    println("Erro ao ler o arquivo: " + e.getMessage());
   }
 }

@@ -117,7 +117,7 @@ def plotar_diagrama_mollier(conjunto_dados=3):
     plt.legend()
     # plot.savefig(os.path.join('assets', 'imagem2.png')) 
     # plot.savefig('imagem2.png') 
-    caminho_imagem = r'C:\ProgJean\RaspberryResfriacao\assets\images\imagem2.png'
+    caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem2.png'
 
     plot.savefig(caminho_imagem) 
     plt.close('all')  # Libera os recursos de plotagem

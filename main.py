@@ -23,10 +23,10 @@ async def run_script(script_path):
 async def main():
     # Caminhos absolutos para os scripts
     scripts = [
-        r"C:\ProgJean\RaspberryResfriacao\Back-End\GraficoPython\gerar_dados.py",
-        r"C:\ProgJean\RaspberryResfriacao\Back-End\GraficoPython\GraficoA.py",
-        r"C:\ProgJean\RaspberryResfriacao\Back-End\GraficoPython\GraficoB.py",
-        r"C:\ProgJean\RaspberryResfriacao\Back-End\GraficoPython\GraficoC.py"
+        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/gerar_dados.py",
+        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoA.py",
+        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoB.py",
+        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoC.py"
     ]
 
     # Cria tarefas para executar os scripts em paralelo

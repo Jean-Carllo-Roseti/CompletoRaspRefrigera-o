@@ -56,6 +56,6 @@ def gerar_dados_sensores(caminho_arquivo):
     print(f"Dados salvos em: {caminho_arquivo}")
 
 # Caminho do arquivo onde os dados serão salvos
-caminho_arquivo = caminho_arquivo = "C:\\ProgJean\\RaspberryResfriacao\\valores_sensores.txt"
+caminho_arquivo = caminho_arquivo = "/home/avionics/Desktop/RaspberryResfriacao/valores_sensores.txt"
 gerar_dados_sensores(caminho_arquivo)
 
