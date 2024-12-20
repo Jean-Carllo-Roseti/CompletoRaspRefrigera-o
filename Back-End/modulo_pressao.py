@@ -45,6 +45,4 @@ while True:
         except Exception as e:
             print(f"\nErro: {e}")
             time.sleep(1)
-    else:
-        print("Socket não está aberto. Tentando novamente...")
-        time.sleep(1)
+
