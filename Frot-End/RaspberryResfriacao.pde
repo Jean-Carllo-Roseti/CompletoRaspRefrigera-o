@@ -116,30 +116,30 @@ void draw() {
   }
 
   // Desenha as imagens
-  image(img1, 0, 420, 450, 350);  // Imagem 1
-  image(img2, 450, 420, 450, 350); // Imagem 2
-  image(img3, 900, 420, 450, 350); // Imagem 3
-  image(img4, 30, 20, 1300, 400);  // Imagem 4 (não atualiza automaticamente, permanece fixa)
+  image(img1, 0, 420, 350, 300);  // Imagem 1
+  image(img2, 340, 420, 350, 300); // Imagem 2
+  image(img3, 680, 420, 350, 300); // Imagem 3
+  image(img4, 30, 20, 1000, 400);  // Imagem 4 (não atualiza automaticamente, permanece fixa)
    
       //BOX1
-    drawSensorCircle("P5", pressures[4], 190, 127);
-    drawSensorCircle("P4", pressures[3], 190, 210);
+    drawSensorCircle("P5", pressures[4], 150, 127);
+    drawSensorCircle("P4", pressures[3], 150, 210);
     
-    drawSensorCircleTemp("T1", temperatures[0], 190, 165);
-    drawSensorCircleTemp("T4", temperatures[2], 80, 130);
-    drawSensorCircleTemp("T3", temperatures[3], 80, 160);
-    drawSensorCircleTemp("TEO", temperatures[4], 70, 255);
-    drawSensorCircleTemp("T2", temperatures[1], 190, 245);
+    drawSensorCircleTemp("T1", temperatures[0], 150, 165);
+    drawSensorCircleTemp("T4", temperatures[2], 65, 130);
+    drawSensorCircleTemp("T3", temperatures[3], 65, 160);
+    drawSensorCircleTemp("TEO", temperatures[4], 60, 255);
+    drawSensorCircleTemp("T2", temperatures[1], 150, 245);
   
     // BOX2
-    drawSensorCircle("P6", pressures[5], 360, 372);
-    drawSensorCircle("P7", pressures[6], 355, 253);
+    drawSensorCircle("P6", pressures[5], 285, 372);
+    drawSensorCircle("P7", pressures[6], 285, 253);
     
-    drawSensorCircleTemp("TEO", temperatures[9], 275, 402);
-    drawSensorCircleTemp("T9", temperatures[8], 425, 315);
-    drawSensorCircleTemp("T8", temperatures[7], 425, 355);
-    drawSensorCircleTemp("T7", temperatures[6], 360, 402);
-    drawSensorCircleTemp("T6", temperatures[5], 355, 288);
+    drawSensorCircleTemp("TEO", temperatures[9], 220, 402);
+    drawSensorCircleTemp("T9", temperatures[8], 340, 315);
+    drawSensorCircleTemp("T8", temperatures[7], 340, 355);
+    drawSensorCircleTemp("T7", temperatures[6], 285, 402);
+    drawSensorCircleTemp("T6", temperatures[5], 285, 288);
   
     // BOX3
     drawSensorCircle("P8", pressures[7], 864, 380);
@@ -147,9 +147,9 @@ void draw() {
     
     drawSensorCircleTemp("T12", temperatures[11], 864, 408);
     drawSensorCircleTemp("T11", temperatures[10], 864, 330); 
-    drawSensorCircleTemp("T14", temperatures[13], 700, 315);
-    drawSensorCircleTemp("T13", temperatures[12], 700, 290);
-    drawSensorCircleTemp("TEO", temperatures[14], 780, 408);
+    drawSensorCircleTemp("T14", temperatures[13], 550, 315);
+    drawSensorCircleTemp("T13", temperatures[12], 550, 290);
+    drawSensorCircleTemp("TEO", temperatures[14], 610, 408);
   
     // BOX4
     drawSensorCircle("P3", pressures[2], 680, 205);
