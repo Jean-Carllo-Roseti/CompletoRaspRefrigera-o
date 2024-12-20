@@ -1,40 +1,3 @@
-#import serial
-#import time
-
-## Configuração da porta serial
-#ser = serial.Serial(
-#    port='/dev/ttyUSB0', 
-#    baudrate=115200,        
-#    bytesize=serial.EIGHTBITS,
-#    parity=serial.PARITY_NONE,
-#    stopbits=serial.STOPBITS_ONE,
-#    timeout=1             
-#)
-
-## Imprime o nome da porta serial
-#print(ser.name)
-
-#try:
-#    if not ser.isOpen():
-#        ser.open()  # Tenta abrir a porta, se ainda não estiver aberta
-#        print("Porta serial aberta com sucesso.")
-#    
-#    while True:
-#        if ser.in_waiting > 0:  # Verifica se há dados disponíveis na porta
-#            data = ser.readline()  # Lê uma linha de dados
-#           print(f"Dados recebidos: {data.decode('utf-8').strip()}")
-#       else:
-#            print("Nenhum dado recebido.")
-#            
-#        time.sleep(1)
-
-#except KeyboardInterrupt:
-#    print("Programa encerrado.")
-#finally:
-#    if ser.isOpen():
-#        ser.close()  # Fecha a porta serial quando o programa terminar
-
-
 from pymodbus.client import ModbusSerialClient
 import time
 import signal
@@ -56,29 +19,32 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 # Conexão ao dispositivo
-conexão = cliente.connect()
-
-if conexão:
+if cliente.connect():
     print('Conexão estabelecida com sucesso.')
 else:
     print('Falha ao conectar.')
     exit()
 
 while True:
-    if not cliente.connect():
-        print("Not connected, trying to connect!")
-        time.sleep(5)
-        continue
-    try:
-        leitura = cliente.read_input_registers(address=ADDRESS, count=1, slave=UNIT_ID)
-        if leitura.isError():
-            print("Erro na leitura dos registros")
-        else:
-            for i, valor in enumerate(leitura.registers):
-                mV = valor
-                PSI = (mV / 1000) * (5 / 5)
-                print(f"\rRegistro {i+1}: {mV} mV ({PSI:.2f})\033[K", end='')
-        time.sleep(1)
-    except Exception as e:
-        print(f"\nErro: {e}")
+    if cliente.is_socket_open():
+        try:
+            # Aqui você pode alterar o count para o número de registros que você deseja ler
+            count = 8  # Exemplo: ler 8 registros
+            leitura = cliente.read_input_registers(address=ADDRESS, count=count, slave=UNIT_ID)
+
+            if leitura.isError():
+                print("Erro na leitura dos registros")
+            else:
+                # Exibindo todos os registros lidos
+                for i, valor in enumerate(leitura.registers):
+                    mV = valor
+                    PSI = (mV / 1000) * (5 / 5)  # Exemplo de conversão
+                    print(f"\nRegistro {i+1}: {mV} mV ({PSI:.2f})")  # Mudando para \n para garantir nova linha
+
+            time.sleep(1)
+        except Exception as e:
+            print(f"\nErro: {e}")
+            time.sleep(1)
+    else:
+        print("Socket não está aberto. Tentando novamente...")
         time.sleep(1)
