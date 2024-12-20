@@ -46,3 +46,6 @@ while True:
             print(f"\nErro: {e}")
             time.sleep(1)
 
+#criar dois arrays de temp e pressão, 
+#seprar os valores recebidos em seus ararys,
+#alterar os gráficos.
