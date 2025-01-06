@@ -38,8 +38,8 @@ while True:
                 # Exibindo todos os registros lidos
                 for i, valor in enumerate(leitura.registers):
                     mV = valor
-                    PSI = (mV / 1000) * (5 / 5)  # Exemplo de conversão
-                    print(f"\nRegistro {i+1}: {mV} mV ({PSI:.2f})")  # Mudando para \n para garantir nova linha
+                    PSI = (mV / 10) 
+                    print(f"\nRegistro {i+1}: {mV} mV ({PSI:.2f}) PSI")  # Mudando para \n para garantir nova linha
 
             time.sleep(1)
         except Exception as e:
