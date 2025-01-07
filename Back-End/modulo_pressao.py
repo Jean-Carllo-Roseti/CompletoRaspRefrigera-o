@@ -1,4 +1,5 @@
 from pymodbus.client import ModbusSerialClient
+from queue import Queue
 import time
 import signal
 import sys
@@ -8,9 +9,15 @@ PORTA = '/dev/ttyUSB0'
 BAUDRATE = 9600
 UNIT_ID = 1
 ADDRESS = 0
+COUNT = 8  
 
+# Fila para armazenar os dados de pressão
+pressao_queue = Queue()
+
+# Criando cliente Modbus
 cliente = ModbusSerialClient(port=PORTA, baudrate=BAUDRATE, timeout=2)
 
+# Tratamento de interrupção (Ctrl+C)
 def signal_handler(sig, frame):
     print('\nInterrupção detectada. Fechando conexão...')
     cliente.close()
@@ -25,29 +32,29 @@ else:
     print('Falha ao conectar.')
     exit()
 
+# Loop principal para leitura contínua
 while True:
     if cliente.is_socket_open():
         try:
-            # Aqui você pode alterar o count para o número de registros que você deseja ler
-            count = 8  # Exemplo: ler 8 registros
-            leitura = cliente.read_input_registers(address=ADDRESS, count=count, slave=UNIT_ID)
+            # Leitura dos registros Modbus
+            leitura = cliente.read_input_registers(address=ADDRESS, count=COUNT, slave=UNIT_ID)
 
             if leitura.isError():
                 print("Erro na leitura dos registros")
             else:
-                # Dividindo os valores lidos em dois arrays: pressão e temperatura
                 valores = leitura.registers  # Array de valores lidos
-                pressao = valores[:4]  # Primeiros 4 valores
-                temperatura = valores[4:]  # Últimos 4 valores
-
                 print("\nPressão (mV e PSI):")
-                for i, valor in enumerate(pressao):
-                    PSI = valor / 10  # Conversão de mV para PSI possivel 0,5m 4,5mV
+
+                for i, valor in enumerate(valores):
+                    PSI = valor / 10  # Conversão de mV para PSI
                     print(f"Registro {i+1}: {valor} mV ({PSI:.2f} PSI)")
 
-                print("\nTemperatura (mV):")
-                for i, valor in enumerate(temperatura):
-                    print(f"Registro {i+5}: {valor} mV")  # Índice começa em 5 para diferenciar
+                    # Adicionando o valor convertido na fila
+                    pressao_queue.put(PSI)
+
+                # Garantir que a fila não cresça indefinidamente
+                while pressao_queue.qsize() > 100:  # Limite de 100 elementos
+                    pressao_queue.get()
 
             time.sleep(1)
         except Exception as e:
