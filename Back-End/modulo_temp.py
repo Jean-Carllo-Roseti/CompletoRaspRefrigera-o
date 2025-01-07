@@ -9,7 +9,9 @@ BAUDRATE = 9600         # Taxa de comunicação
 UNIT_ID = 1             # Slave ID
 ADDRESS = 32            # Endereço ajustado para base 0
 QUANTITY = 16           # Quantidade de registros
-SCAN_RATE = 1.0         # Taxa de leitura em segundos (1000 ms)
+FACTOR = 10             # Fator de escala
+
+temperaturas = []
 
 # Criando o cliente Modbus
 cliente = ModbusSerialClient(port=PORTA, baudrate=BAUDRATE, timeout=2)
@@ -40,12 +42,16 @@ while True:
             else:
                 # Exibindo os registros lidos
                 valores = leitura.registers  # Array de valores lidos
-                print("\nValores lidos:")
-                for i, valor in enumerate(valores):
-                    print(f"Registro {ADDRESS + i + 1} (Base 1): {valor}")
+                print("\nTemperaturas lidas:")
 
-            # Pausa para respeitar o SCAN_RATE
-            time.sleep(SCAN_RATE)
+                temperaturas = [temp / FACTOR for temp in valores]
+                
+                 # Exibindo cada valor de temperatura em uma linha
+                for temp in temperaturas:
+                    print(temp / FACTOR)
+
+
+            time.sleep(1)
         except Exception as e:
             print(f"\nErro: {e}")
-            time.sleep(SCAN_RATE)
+            time.sleep(1)
