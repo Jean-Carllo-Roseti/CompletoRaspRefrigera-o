@@ -2,6 +2,7 @@ from pymodbus.client import ModbusSerialClient
 import time
 import signal
 import sys
+import queue
 
 # Configuração do dispositivo e Modbus
 PORTA = '/dev/ttyUSB0'  # Porta serial
@@ -11,7 +12,8 @@ ADDRESS = 32            # Endereço ajustado para base 0
 QUANTITY = 16           # Quantidade de registros
 FACTOR = 10             # Fator de escala
 
-temperaturas = []
+# Fila de temperaturas para passar para outros scripts
+temp_queue = queue.Queue()
 
 # Criando o cliente Modbus
 cliente = ModbusSerialClient(port=PORTA, baudrate=BAUDRATE, timeout=2)
@@ -44,12 +46,13 @@ while True:
                 valores = leitura.registers  # Array de valores lidos
                 print("\nTemperaturas lidas:")
 
+                # Dividindo as temperaturas pelo fator
                 temperaturas = [temp / FACTOR for temp in valores]
                 
-                 # Exibindo cada valor de temperatura em uma linha
+                # Exibindo cada valor de temperatura em uma linha
                 for temp in temperaturas:
-                    print(temp / FACTOR)
-
+                    print(temp)
+                    temp_queue.put(temp)  # Inserindo cada temperatura na fila
 
             time.sleep(1)
         except Exception as e:
