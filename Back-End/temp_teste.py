@@ -1,38 +1,75 @@
+FILE_NAME = "dados_temperatura.txt"  # Nome do arquivo para leitura
 
-#from modulo_temp import temperaturas
+def ler_arquivo_e_transformar_em_array():
+    """
+    Lê os dados do arquivo e transforma em um array de floats.
+    """
+    try:
+        with open(FILE_NAME, "r") as f:
+            data = f.read().strip()
+            if data:
+                # Converte os dados para uma lista de floats
+                array = list(map(float, data.split(",")))
+                return array
+            else:
+                print("O arquivo está vazio.")
+                return []
+    except FileNotFoundError:
+        print(f"Erro: O arquivo '{FILE_NAME}' não foi encontrado.")
+        return []
+    except Exception as e:
+        print(f"Erro ao processar o arquivo: {e}")
+        return []
 
-#temperatura_1 = temperaturas[0]
-#temperatura_2 = temperaturas[1]
+# Continuar seu código anterior...
 
-#print(temperatura_1, temperatura_2) teste de dados em queue
+def atribuir_elementos_a_variaveis(array):
+    """
+    Atribui os elementos do array a variáveis separadas e retorna um dicionário.
+    """
+    if len(array) != 16:
+        print(f"Atenção: O array contém {len(array)} elementos. Esperado: 8.")
+        return {}
+    
+    # Criando variáveis dinâmicas e atribuindo os valores dos elementos
+    variaveis = {
+        "temperatura_1": array[0],
+        "temperatura_2": array[1],
+        "temperatura_3": array[2],
+        "temperatura_4": array[3],
+        # Caso tenha mais elementos, continue o padrão
+        # Se necessário, você pode expandir a lista conforme o seu código.
+    }
+    return variaveis
 
-import time
-import matplotlib.pyplot as plt
-import queue
+def main():
+    # Lê o arquivo e transforma os dados em array
+    array = ler_arquivo_e_transformar_em_array()
+    
+    # Exibe o array criado
+    print("Array criado a partir do arquivo:")
+    print(array)
+    
+    # Atribui os elementos do array a variáveis
+    if array:
+        variaveis = atribuir_elementos_a_variaveis(array)
+        if variaveis:
+            print("\nVariáveis atribuídas com os elementos do array:")
+            for nome, valor in variaveis.items():
+                print(f"{nome} = {valor}")
+            
+            # Aqui, você pode acessar as variáveis específicas
+            temperatura_1 = variaveis["temperatura_1"]
+            temperatura_2 = variaveis["temperatura_2"]
+            temperatura_3 = variaveis["temperatura_3"]
+            temperatura_4 = variaveis["temperatura_4"]
+            # Usar as variáveis conforme necessário
+            print("\nVariáveis individuais:")
+            print(f"temperatura_1 = {temperatura_1}")
+            print(f"temperatura_2 = {temperatura_2}")
+            print(f"temperatura_3 = {temperatura_3}")
+            print(f"temperatura_4 = {temperatura_4}")
 
-# Importando a fila de temperaturas (temp_queue)
-from modulo_temp import temp_queue
-
-# Função para gerar gráfico A
-def gerar_grafico_a():
-    temperaturas = []
-    while True:
-        if not temp_queue.empty():
-            temperatura = temp_queue.get()  # Consome o dado da fila
-            temperaturas.append(temperatura)
-
-            # Gerando gráfico (para fins ilustrativos)
-            plt.plot(temperaturas)
-            plt.xlabel('Tempo')
-            plt.ylabel('Temperatura')
-            plt.title('Temperatura ao longo do tempo')
-            plt.pause(1)  # Pausa para a atualização do gráfico
-
-            # Limpar o gráfico a cada novo dado
-            plt.clf()
-
-        time.sleep(1)  # Aguarda antes de verificar novamente a fila
-
-# Executando a geração do gráfico
 if __name__ == "__main__":
-    gerar_grafico_a()
+    main()
+
