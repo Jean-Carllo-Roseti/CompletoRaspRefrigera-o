@@ -1,10 +1,10 @@
-from modulo_pressao import pressao_queue
 import time
+from modulo_pressao import obter_valores
+from pressao_central import pressao_array
 
 while True:
-    if not pressao_queue.empty():
-        valor = pressao_queue.get()
-        print(f"Valor de pressão consumido: {valor} PSI")
-    else:
-        print("Aguardando novos valores...")
-    time.sleep(0.5)
+    valores = obter_valores()
+    lista = pressao_array  # Acesso direto à variável pressao_array
+    print(f'Valores obtidos: {valores}')  # Exibe o array completo
+    print(f'Posição1: {lista[0]}')  # Exibe a posição 1 (índice 0)
+    time.sleep(1)
