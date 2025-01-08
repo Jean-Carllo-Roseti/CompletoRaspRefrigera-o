@@ -14,63 +14,74 @@ import time
 #09,08/07,06/ = TEMP EVAPORADORA
 #A13/A14 = PRESSAO EVAPORADORA
 
-FILE_NAME = "dados_pressao.txt"  
+# Arquivos para leitura
+FILE_PRESSAO = "dados_pressao.txt"
+FILE_TEMPERATURA = "dados_temperatura.txt"  
 
-def ler_arquivo_e_transformar_em_array():
+def ler_arquivo_e_transformar_em_array(file_name):
     """
     Lê os dados do arquivo e transforma em um array de floats.
     """
     try:
-        with open(FILE_NAME, "r") as f:
+        with open(file_name, "r") as f:
             data = f.read().strip()
             if data:
                 # Converte os dados para uma lista de floats
                 array = list(map(float, data.split(",")))
                 return array
             else:
-                print("O arquivo está vazio.")
+                print(f"O arquivo '{file_name}' está vazio.")
                 return []
     except FileNotFoundError:
-        print(f"Erro: O arquivo '{FILE_NAME}' não foi encontrado.")
+        print(f"Erro: O arquivo '{file_name}' não foi encontrado.")
         return []
     except Exception as e:
-        print(f"Erro ao processar o arquivo: {e}")
+        print(f"Erro ao processar o arquivo '{file_name}': {e}")
         return []
 
-def atribuir_elementos_a_variaveis(array):
+def atribuir_elementos_a_variaveis_pressao(array):
     """
-    Atribui os elementos do array a variáveis separadas e retorna um dicionário.
+    Atribui os elementos do array de pressão a variáveis separadas.
     """
     if len(array) != 8:
-        print(f"Atenção: O array contém {len(array)} elementos. Esperado: 8.")
+        print(f"Atenção: O array de pressão contém {len(array)} elementos. Esperado: 8.")
         return {}
 
-    # Converte psi para kPa (multiplicando por 6.89476)
-    psi_to_kPa = 6.89476
-    
-    # Atribui valores extraídos do array às variáveis
-    variaveis = {
+    variaveis_pressao = {
+        #"pressao_1": array[0],
+        #"pressao_2": array[1],
+        #"pressao_3": array[2],
+        #"pressao_4": array[3]
         "pressao_1": 229.87,  # kPa
         "pressao_2": 2025.79,  # kPa
         "pressao_3": 1997.55,  # kPa
         "pressao_4": 254.03   # kPa
-        #"pressao_1": array[0],
-        #"pressao_2": array[1],
-        #"pressao_3": array[2],
-        #"pressao_4": array[3],
-        # Adicione mais variáveis conforme necessário
     }
-    return variaveis
+    return variaveis_pressao
+
+def atribuir_elementos_a_variaveis_temperatura(array):
+    """
+    Atribui os elementos do array de temperatura a variáveis separadas.
+    """
+    if len(array) != 16:
+        print(f"Atenção: O array de temperatura contém {len(array)} elementos. Esperado: 16.")
+        return {}
+
+    variaveis_temperatura = {
+        "temperatura_1": 310.15,  # Kelvin  
+        "temperatura_2": 343.55,  # Kelvin  
+        "temperatura_3": 280.55,  # Kelvin  
+        "temperatura_4": 284.85  # Kelvin 
+        #"temperatura_1": array[0],
+        #"temperatura_2": array[1],
+        #"temperatura_3": array[2],
+        #"temperatura_4": array[3]
+    }
+    return variaveis_temperatura
 
 
-def gerar_dados_mollier(pressao_1, pressao_2, pressao_3, pressao_4):
+def gerar_dados_mollier(pressao_1, pressao_2, pressao_3, pressao_4, temperatura_1, temperatura_2, temperatura_3, temperatura_4):
     # Calcular a entalpia em todos os pontos do ciclo usando as pressões recebidas como parâmetros
-    temperatura_1 = 310.15  # Kelvin  
-    temperatura_2 = 343.55  # Kelvin  
-    temperatura_3 = 280.55  # Kelvin  
-    temperatura_4 = 284.85  # Kelvin 
-   
-
     entalpias = [
         PropsSI('H', 'T', temperatura_1, 'P', pressao_1 * 1000, 'HEOS::R134a') / 1000,  # Ponto 1
         PropsSI('H', 'T', temperatura_2, 'P', pressao_2 * 1000, 'HEOS::R134a') / 1000,  # Ponto 2
@@ -87,17 +98,24 @@ def gerar_dados_mollier(pressao_1, pressao_2, pressao_3, pressao_4):
     return temperaturas, pressões, entalpias
 
 def plotar_diagrama_mollier():
-    array = ler_arquivo_e_transformar_em_array()
-    variaveis = atribuir_elementos_a_variaveis(array)
+    array_pressao = ler_arquivo_e_transformar_em_array(FILE_PRESSAO)
+    array_temperatura = ler_arquivo_e_transformar_em_array(FILE_TEMPERATURA)
+
+    variaveis_pressao = atribuir_elementos_a_variaveis_pressao(array_pressao)
+    variaveis_temperatura = atribuir_elementos_a_variaveis_temperatura(array_temperatura)
+
 
     # Passa os valores de pressão extraídos para a função gerar_dados_mollier
-    if variaveis:
-        # Indentação corrigida
+    if variaveis_pressao and variaveis_temperatura:
         temperaturas, pressões, entalpias = gerar_dados_mollier(
-            variaveis["pressao_1"], 
-            variaveis["pressao_2"], 
-            variaveis["pressao_3"], 
-            variaveis["pressao_4"]
+            variaveis_pressao["pressao_1"], 
+            variaveis_pressao["pressao_2"], 
+            variaveis_pressao["pressao_3"], 
+            variaveis_pressao["pressao_4"],
+            variaveis_temperatura["temperatura_1"],  # Passando a temperatura_1
+            variaveis_temperatura["temperatura_2"],  # Passando a temperatura_2
+            variaveis_temperatura["temperatura_3"],  # Passando a temperatura_3
+            variaveis_temperatura["temperatura_4"]   # Passando a temperatura_4
         )
 
         plot = PropertyPlot('HEOS::R134a', 'PH', unit_system='KSI', tp_limits='ACHP')
