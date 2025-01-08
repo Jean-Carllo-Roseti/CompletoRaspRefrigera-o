@@ -2,7 +2,40 @@ from pymodbus.client import ModbusSerialClient
 import time
 import signal
 import sys
-import queue
+
+
+temp_array = []
+FILE_NAME = "dados_temperatura.txt"  # Nome do arquivo para salvar os dados
+
+def adicionar_valores(valores):
+    """
+    Adiciona uma lista de valores ao array de pressão.
+    :param valores: Lista contendo os valores de pressão a serem adicionados.
+    """
+    if len(valores) != 16:
+        raise ValueError("A lista de valores deve conter exatamente 8 elementos.")
+    temp_array.extend(valores)
+
+def obter_valores():
+    """
+    Retorna os valores atuais do array de pressão.
+    """
+    return temp_array
+
+def limpar_array():
+    """
+    Limpa todos os valores do array de pressão.
+    """
+    temp_array.clear()
+
+def escrever_em_arquivo(valores):
+    """
+    Escreve os valores de pressão em um arquivo .txt.
+    :param valores: Lista de valores de pressão.
+    """
+    with open(FILE_NAME, "w") as f:
+        f.write(",".join(map(str, valores)))  # Salva os valores separados por vírgulas
+
 
 # Configuração do dispositivo e Modbus
 PORTA = '/dev/ttyUSB0'  # Porta serial
@@ -12,8 +45,7 @@ ADDRESS = 32            # Endereço ajustado para base 0
 QUANTITY = 16           # Quantidade de registros
 FACTOR = 10             # Fator de escala
 
-# Fila de temperaturas para passar para outros scripts
-temp_queue = queue.Queue()
+
 
 # Criando o cliente Modbus
 cliente = ModbusSerialClient(port=PORTA, baudrate=BAUDRATE, timeout=2)
@@ -42,17 +74,25 @@ while True:
             if leitura.isError():
                 print("Erro na leitura dos registros.")
             else:
-                # Exibindo os registros lidos
                 valores = leitura.registers  # Array de valores lidos
-                print("\nTemperaturas lidas:")
+                temp_valores = [valor / FACTOR for valor in valores]
 
-                # Dividindo as temperaturas pelo fator
-                temperaturas = [temp / FACTOR for temp in valores]
+                # Atualizando o array centralizador
+                limpar_array()  # Limpa os valores antigos
+                adicionar_valores(temp_valores)  # Adiciona os novos valores
+
+                 # Escrevendo no arquivo .txt
+                escrever_em_arquivo(temp_valores)
                 
-                # Exibindo cada valor de temperatura em uma linha
-                for temp in temperaturas:
-                    print(temp)
-                    temp_queue.put(temp)  # Inserindo cada temperatura na fila
+
+                # Imprimindo os valores atualizados
+                print("\nPressão (mV e Celsius):")
+                for i, valor in enumerate(valores):
+                    print(f"Registro {i+1}: {valor} mV ({temp_valores[i]:.2f} Celsius)")
+
+                # Exibindo os valores armazenados no array centralizador
+                #print("Valores no array centralizador:", obter_valores())
+                   
 
             time.sleep(1)
         except Exception as e:
