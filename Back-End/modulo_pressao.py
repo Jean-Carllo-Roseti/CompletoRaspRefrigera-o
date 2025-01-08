@@ -1,8 +1,39 @@
 from pymodbus.client import ModbusSerialClient
-from pressao_central import adicionar_valores, limpar_array, obter_valores
 import time
 import signal
 import sys
+
+pressao_array = []
+FILE_NAME = "dados_pressao.txt"  # Nome do arquivo para salvar os dados
+
+def adicionar_valores(valores):
+    """
+    Adiciona uma lista de valores ao array de pressão.
+    :param valores: Lista contendo os valores de pressão a serem adicionados.
+    """
+    if len(valores) != 8:
+        raise ValueError("A lista de valores deve conter exatamente 8 elementos.")
+    pressao_array.extend(valores)
+
+def obter_valores():
+    """
+    Retorna os valores atuais do array de pressão.
+    """
+    return pressao_array
+
+def limpar_array():
+    """
+    Limpa todos os valores do array de pressão.
+    """
+    pressao_array.clear()
+
+def escrever_em_arquivo(valores):
+    """
+    Escreve os valores de pressão em um arquivo .txt.
+    :param valores: Lista de valores de pressão.
+    """
+    with open(FILE_NAME, "w") as f:
+        f.write(",".join(map(str, valores)))  # Salva os valores separados por vírgulas
 
 # Configuração da conexão
 PORTA = '/dev/ttyUSB0'
@@ -42,16 +73,20 @@ while True:
                 valores = leitura.registers  # Array de valores lidos
                 PSI_valores = [valor / 10 for valor in valores]  # Conversão de mV para PSI
 
-                # Atualizando o array centralizado
+                # Atualizando o array centralizador
                 limpar_array()  # Limpa os valores antigos
                 adicionar_valores(PSI_valores)  # Adiciona os novos valores
+
+                # Escrevendo no arquivo .txt
+                escrever_em_arquivo(PSI_valores)
 
                 # Imprimindo os valores atualizados
                 print("\nPressão (mV e PSI):")
                 for i, valor in enumerate(valores):
                     print(f"Registro {i+1}: {valor} mV ({PSI_valores[i]:.2f} PSI)")
 
-                
+                # Exibindo os valores armazenados no array centralizador
+                print("Valores no array centralizador:", obter_valores())
 
             time.sleep(1)
         except Exception as e:
