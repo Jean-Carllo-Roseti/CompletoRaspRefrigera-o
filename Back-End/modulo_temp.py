@@ -40,7 +40,7 @@ def escrever_em_arquivo(valores):
 # Configuração do dispositivo e Modbus
 PORTA = '/dev/ttyUSB0'  # Porta serial
 BAUDRATE = 9600         # Taxa de comunicação
-UNIT_ID = 1             # Slave ID
+UNIT_ID = 2             # Slave ID
 ADDRESS = 32            # Endereço ajustado para base 0
 QUANTITY = 16           # Quantidade de registros
 FACTOR = 10             # Fator de escala

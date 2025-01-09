@@ -8,10 +8,10 @@ import os
 import time
 
 #ordem dos valores da cablagem
-#13,12/11,10/ = TEMP MOTOR
+#01,02/03,04/ = TEMP MOTOR
 #A11/A12/ = PRESSAO MOTOR 
 
-#09,08/07,06/ = TEMP EVAPORADORA
+#05,06/07,08/ = TEMP EVAPORADORA
 #A13/A14 = PRESSAO EVAPORADORA
 
 # Arquivos para leitura
