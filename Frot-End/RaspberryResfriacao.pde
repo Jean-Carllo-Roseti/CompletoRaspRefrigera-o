@@ -309,37 +309,56 @@ void mousePressed() {
   float saveWidth = width * 0.05;     // Largura do botão
   float saveHeight = height * 0.025;  // Altura do botão
   
-  /*
-  
-  drawTextInput(userInput1, width * 0.052, height * 0.39, "SN"); //BOX1
-    drawTextInput(userInput2, width * 0.14, height * 0.47, "SN"); //BOX2
-    drawTextInput(userInput3, width * 0.753, height * 0.511, "SN"); //BOX3
-    drawTextInput(userInput4, width * 0.538, height * 0.132, "SN"); //BO4 CONDENSER ASSY
-    drawTextInput(userInput5, width * 0.88, height * 0.4, "SN"); //COMPRESSOR
-    drawTextInput(userInput6, width * 0.7, height * 0.132, "SN"); //FAN
-  
-  */
+  // Coordenadas e tamanhos dos campos de entrada
+  float inputWidth = width * 0.1;    // Largura do campo de texto
+  float inputHeight = height * 0.02; // Altura do campo de texto
+
+  float inputX1 = width * 0.052;     // Coordenada X do campo 1
+  float inputY1 = height * 0.39;     // Coordenada Y do campo 1
+
+  float inputX2 = width * 0.14;      // Coordenada X do campo 2
+  float inputY2 = height * 0.47;     // Coordenada Y do campo 2
+
+  float inputX3 = width * 0.753;     // Coordenada X do campo 3
+  float inputY3 = height * 0.511;    // Coordenada Y do campo 3
+
+  float inputX4 = width * 0.538;     // Coordenada X do campo 4
+  float inputY4 = height * 0.132;    // Coordenada Y do campo 4
+
+  float inputX5 = width * 0.88;      // Coordenada X do campo 5
+  float inputY5 = height * 0.4;      // Coordenada Y do campo 5
+
+  float inputX6 = width * 0.7;       // Coordenada X do campo 6
+  float inputY6 = height * 0.132;    // Coordenada Y do campo 6
 
   // Verifica se o clique foi dentro do botão "Save"
   if (mouseX > saveX && mouseX < saveX + saveWidth &&
       mouseY > saveY && mouseY < saveY + saveHeight) {
     saveWithTimestamp(); // Chama a função de salvar
   }
-     // Detecta qual campo de entrada foi clicado
-    if (mouseX > 60 && mouseX < 160 && mouseY > 295 && mouseY < 315) {
-      currentInput = 0; // Campo userInput1
-    } else if (mouseX > 190 && mouseX < 307 && mouseY > 340 && mouseY < 390) {
-      currentInput = 1; // Campo userInput2
-    } else if (mouseX > 1000 && mouseX < 1100 && mouseY > 390 && mouseY < 405) {
-      currentInput = 2; // Campo userInput3
-    } else if (mouseX > 710 && mouseX < 810 && mouseY > 105 && mouseY < 120) {
-      currentInput = 3; // 
-    } else if (mouseX > 1195 && mouseX < 1295 && mouseY > 300 && mouseY < 315) {
-      currentInput = 4; // 
-    }  else if (mouseX > 995 && mouseX < 1095 && mouseY > 95 && mouseY < 110) {
-      currentInput = 5; // 
+
+  // Detecta qual campo de entrada foi clicado
+  if (mouseX > inputX1 && mouseX < inputX1 + inputWidth &&
+      mouseY > inputY1 && mouseY < inputY1 + inputHeight) {
+    currentInput = 0; // Campo userInput1
+  } else if (mouseX > inputX2 && mouseX < inputX2 + inputWidth &&
+             mouseY > inputY2 && mouseY < inputY2 + inputHeight) {
+    currentInput = 1; // Campo userInput2
+  } else if (mouseX > inputX3 && mouseX < inputX3 + inputWidth &&
+             mouseY > inputY3 && mouseY < inputY3 + inputHeight) {
+    currentInput = 2; // Campo userInput3
+  } else if (mouseX > inputX4 && mouseX < inputX4 + inputWidth &&
+             mouseY > inputY4 && mouseY < inputY4 + inputHeight) {
+    currentInput = 3; // Campo userInput4
+  } else if (mouseX > inputX5 && mouseX < inputX5 + inputWidth &&
+             mouseY > inputY5 && mouseY < inputY5 + inputHeight) {
+    currentInput = 4; // Campo userInput5
+  } else if (mouseX > inputX6 && mouseX < inputX6 + inputWidth &&
+             mouseY > inputY6 && mouseY < inputY6 + inputHeight) {
+    currentInput = 5; // Campo userInput6
   }
 }
+
 
 void keyPressed() {
   // Remoção de caracteres com BACKSPACE
