@@ -62,43 +62,43 @@ void setup() {
   
   
   posicoes = new PVector[]{
-      new PVector(102, 147),  // Air Out BOX 1
-      new PVector(102, 117),  // Air In BOX 1
-      new PVector(1005, 87), // Condenser Fan 
-      new PVector(710, 95), // Condenser Assy
-      new PVector(445, 342), // BOX 2 AIR IN
-      new PVector(530, 50), // P2, P3, P4, P6, P8: SB69-500V
-      new PVector(530, 70),  // P1, P7, P5, P9: SB69-100V
-      new PVector(60, 285),  // Evaporator Box1
-      new PVector(1003, 382),  // Evaporator Box3
-      new PVector(1195, 290),  // Compressor Module
-      new PVector(210, 356),  // Evaporator box2
-      new PVector(445, 302),  // Air out Box2
-      new PVector(276, 215),  // In Ref Box 2 
-      new PVector(302, 135),  // Out Ref Box 1
+      new PVector(width * 0.085, height * 0.19),  // Air Out BOX 1
+      new PVector(width * 0.085, height * 0.155),  // Air In BOX 1
+      new PVector(width * 0.70, height * 0.12), // Condenser Fan 
+      new PVector(width * 0.538, height * 0.12), // Condenser Assy
+      new PVector(width * 0.55, height * 0.365), // BOX 2 AIR IN
+      new PVector(width * 0.405, height * 0.075), // P2, P3, P4, P6, P8: SB69-500V
+      new PVector(width * 0.405, height * 0.096),  // P1, P7, P5, P9: SB69-100V
+      new PVector(width * 0.054, height * 0.3745),  // Evaporator Box1
+      new PVector(width * 0.756, height * 0.496),  // Evaporator Box3
+      new PVector(width * 0.88, height * 0.39),  // Compressor Module
+      new PVector(width * 0.142, height * 0.455),  // Evaporator box2
+      new PVector(width * 0.55, height * 0.394),  // Air out Box3
+      new PVector(width * 0.265, height * 0.28),  // In Ref Box 3 
+      new PVector(width * 0.29, height * 0.175),  // Out Ref Box 1
       
-      new PVector(610, 385),  // In Ref Box 4
+      new PVector(width * 0.52, height * 0.5),  // In Ref Box 4
       
-      new PVector(920, 261),  // Out Refr BOX 3
-      new PVector(720, 279),  // Air in BOX 3
-      new PVector(720, 304),  // Air Out BOX 3
+      new PVector(width * 0.7, height * 0.34),  // Out Refr BOX 3
+      new PVector(width * 0.345, height * 0.435),  // Air in BOX 2
+      new PVector(width * 0.345, height * 0.39),  // Air Out BOX 2
       
-      new PVector(820, 245),  // Temp In BOX 4
-      new PVector(820, 138),  // Temp Out BOX 4
-      new PVector(940, 200),  // Air In BOX 4
+      new PVector(width * 0.64, height * 0.32),  // Temp In BOX 4
+      new PVector(width * 0.64, height * 0.18),  // Temp Out BOX 4
+      new PVector(width * 0.71, height * 0.25),  // Air In BOX 4
       
-      new PVector(640, 142),  // In Linha Azul
-      new PVector(545, 142),  // OUt Linha Azul
+      new PVector(width * 0.48, height * 0.185),  // In Linha Azul
+      new PVector(width * 0.405, height * 0.185),  // OUt Linha Azul
       
-      new PVector(1060, 200),  // Freon out Compressor 
-      new PVector(1060, 263),  // Frenon In Comrpessor
+      new PVector(width * 0.79, height * 0.26),  // Freon out Compressor 
+      new PVector(width * 0.79, height * 0.3445),  // Frenon In Comrpessor
       
-      new PVector(158, 38),  // Suction - verde
-      new PVector(158, 58),  //  Roxo
-      new PVector(158, 78),  //  AZUL
+      new PVector(width * 0.13, height * 0.045),  // Suction - verde
+      new PVector(width * 0.13, height * 0.075),  //  Roxo
+      new PVector(width * 0.13, height * 0.1),  //  AZUL
       
-      new PVector(1190, 385),  // Data
-      new PVector(1190, 400)  // Hora
+      new PVector(width * 0.88, height * 0.51),  // Data
+      new PVector(width * 0.88, height * 0.525)  // Hora
   };
 }
 
@@ -116,66 +116,66 @@ void draw() {
   }
 
   // Desenha as imagens
-  image(img1, 0, 420, 350, 300);  // Imagem 1
-  image(img2, 340, 420, 350, 300); // Imagem 2
-  image(img3, 680, 420, 350, 300); // Imagem 3
-  image(img4, 30, 20, 1000, 400);  // Imagem 4 (não atualiza automaticamente, permanece fixa)
+  image(img1, 0, 420, width * 0.33, height * 0.38);  // Imagem 1
+  image(img2, 340, 420, width * 0.33, height * 0.38); // Imagem 2
+  image(img3, 680, 420, width * 0.33, height * 0.38); // Imagem 3
+  image(img4, 30, 20, width * 0.97, height * 0.52);  // Imagem 4 (não atualiza automaticamente, permanece fixa)
    
       //BOX1
-    drawSensorCircle("P5", pressures[4], 150, 127);
-    drawSensorCircle("P4", pressures[3], 150, 210);
+    drawSensorCircle("P5", pressures[4], width * 0.147, height * 0.17);
+    drawSensorCircle("P4", pressures[3], width * 0.147, height * 0.267);
     
-    drawSensorCircleTemp("T1", temperatures[0], 150, 165);
-    drawSensorCircleTemp("T4", temperatures[2], 65, 130);
-    drawSensorCircleTemp("T3", temperatures[3], 65, 160);
-    drawSensorCircleTemp("TEO", temperatures[4], 60, 255);
-    drawSensorCircleTemp("T2", temperatures[1], 150, 245);
+    drawSensorCircleTemp("T1", temperatures[0], width * 0.147, height * 0.22);
+    drawSensorCircleTemp("T4", temperatures[2], width * 0.064, height * 0.17);
+    drawSensorCircleTemp("T3", temperatures[3], width * 0.064, height * 0.21);
+    drawSensorCircleTemp("TEO", temperatures[4], width * 0.061, height * 0.34);
+    drawSensorCircleTemp("T2", temperatures[1], width * 0.147, height * 0.32);
   
     // BOX2
-    drawSensorCircle("P6", pressures[5], 285, 372);
-    drawSensorCircle("P7", pressures[6], 285, 253);
+    drawSensorCircle("P6", pressures[5], width * 0.279, height * 0.485);
+    drawSensorCircle("P7", pressures[6], width * 0.277, height * 0.33);
     
-    drawSensorCircleTemp("TEO", temperatures[9], 220, 402);
-    drawSensorCircleTemp("T9", temperatures[8], 340, 315);
-    drawSensorCircleTemp("T8", temperatures[7], 340, 355);
-    drawSensorCircleTemp("T7", temperatures[6], 285, 402);
-    drawSensorCircleTemp("T6", temperatures[5], 285, 288);
+    drawSensorCircleTemp("TEO", temperatures[9], width * 0.20, height * 0.52);
+    drawSensorCircleTemp("T9", temperatures[8], width * 0.325, height * 0.41);
+    drawSensorCircleTemp("T8", temperatures[7], width * 0.325, height * 0.45);
+    drawSensorCircleTemp("T7", temperatures[6], width * 0.279, height * 0.52);
+    drawSensorCircleTemp("T6", temperatures[5], width * 0.277, height * 0.375);
   
     // BOX3
-    drawSensorCircle("P8", pressures[7], 864, 380);
-    drawSensorCircle("P9", pressures[8], 864, 294);
+    drawSensorCircle("P8", pressures[7], width * 0.66, height * 0.46);
+    drawSensorCircle("P9", pressures[8], width * 0.66, height * 0.38);
     
-    drawSensorCircleTemp("T12", temperatures[11], 864, 408);
-    drawSensorCircleTemp("T11", temperatures[10], 864, 330); 
-    drawSensorCircleTemp("T14", temperatures[13], 550, 315);
-    drawSensorCircleTemp("T13", temperatures[12], 550, 290);
-    drawSensorCircleTemp("TEO", temperatures[14], 610, 408);
+    drawSensorCircleTemp("T12", temperatures[11], width * 0.66, height * 0.50);
+    drawSensorCircleTemp("T11", temperatures[10], width * 0.66, height * 0.42); 
+    drawSensorCircleTemp("T14", temperatures[13], width * 0.53, height * 0.41);
+    drawSensorCircleTemp("T13", temperatures[12], width * 0.53, height * 0.38);
+    drawSensorCircleTemp("TEO", temperatures[14], width * 0.62, height * 0.525);
   
     // BOX4
-    drawSensorCircle("P3", pressures[2], 680, 205);
+    drawSensorCircle("P3", pressures[2], width * 0.505, height * 0.267);
     
-    drawSensorCircleTemp("T16", temperatures[15], 920, 213);
-    drawSensorCircleTemp("T18", temperatures[17], 680, 240);
-    drawSensorCircleTemp("T17", temperatures[16], 800, 255);
-    drawSensorCircleTemp("T19", temperatures[18], 800, 150);
-    drawSensorCircleTemp("TF20", temperatures[19], 1000, 130); //FAN  
+    drawSensorCircleTemp("T16", temperatures[15], width * 0.690, height * 0.267);
+    drawSensorCircleTemp("T18", temperatures[17], width * 0.505, height * 0.305);
+    drawSensorCircleTemp("T17", temperatures[16], width * 0.625, height * 0.337);
+    drawSensorCircleTemp("T19", temperatures[18], width * 0.625, height * 0.195);
+    drawSensorCircleTemp("TF20", temperatures[19], width * 0.76, height * 0.18); //FAN  
     
     // LINHAS E EQUIPAMENTOS
-    drawSensorCircle("P2", pressures[1], 1040, 185); // SAIDA MOTOR
-    drawSensorCircleTemp("T23", temperatures[22], 1040, 225); //SAIDA MOTOR
+    drawSensorCircle("P2", pressures[1], width * 0.78, height * 0.24); // SAIDA MOTOR
+    drawSensorCircleTemp("T23", temperatures[22], width * 0.78, height * 0.29); //SAIDA MOTOR
     
-    drawSensorCircle("P1", pressures[0], 1040, 250); //MOTOR Entrada 
-    drawSensorCircleTemp("T22", temperatures[21], 1040, 285); //MOTOR entrada
-    drawSensorCircleTemp("TC", temperatures[23], 1220, 260); //TEMP COMPRESSOR
-    drawSensorCircleTemp("TM", temperatures[24], 1160, 135); // TEMP MOTOR
-    drawSensorCircleTemp("T21", temperatures[20], 570, 125);
+    drawSensorCircle("P1", pressures[0], width * 0.78, height * 0.32); //MOTOR Entrada 
+    drawSensorCircleTemp("T22", temperatures[21], width * 0.78, height * 0.373); //MOTOR entrada
+    drawSensorCircleTemp("TC", temperatures[23], width * 0.90, height * 0.355); //TEMP COMPRESSOR
+    drawSensorCircleTemp("TM", temperatures[24], width * 0.92, height * 0.19); // TEMP MOTOR
+    drawSensorCircleTemp("T21", temperatures[20], width * 0.43, height * 0.17);
     
-    drawTextInput(userInput1, 60, 295, "SN"); //BOX1
-    drawTextInput(userInput2, 207, 365, "SN"); //BOX2
-    drawTextInput(userInput3, 1000, 390, "SN"); //BOX3
-    drawTextInput(userInput4, 710, 105, "SN"); //BO4
-    drawTextInput(userInput5, 1195, 300, "SN"); //COMPRESSOR
-    drawTextInput(userInput6, 995, 95, "SN"); //FAN
+    drawTextInput(userInput1, width * 0.052, height * 0.39, "SN"); //BOX1
+    drawTextInput(userInput2, width * 0.14, height * 0.47, "SN"); //BOX2
+    drawTextInput(userInput3, width * 0.753, height * 0.511, "SN"); //BOX3
+    drawTextInput(userInput4, width * 0.538, height * 0.132, "SN"); //BO4 CONDENSER ASSY
+    drawTextInput(userInput5, width * 0.88, height * 0.4, "SN"); //COMPRESSOR
+    drawTextInput(userInput6, width * 0.7, height * 0.132, "SN"); //FAN
     
   /*
    if (millis() - lastMockUpdateTime > mockUpdateInterval) {
@@ -205,13 +205,18 @@ void draw() {
 }
 
 void drawTextInput(String inputText, float x, float y, String label) {
+  float inputWidth = width * 0.1;  // Largura do campo de texto (exemplo proporcional)
+  float inputHeight = height * 0.02; // Altura do campo de texto (exemplo proporcional)
+
   fill(200); // Cor de fundo do campo de texto
-  rect(x, y, 100, 15); // Desenha o retângulo do campo de texto
+  rect(x, y, inputWidth, inputHeight); // Desenha o retângulo do campo de texto
+
   fill(0); // Cor do texto (preto)
   textSize(10);
   textAlign(LEFT, CENTER);
-  text(label + ": " + inputText, x + 2, y + 7); // Texto de entrada
+  text(label + ": " + inputText, x + 5, y + inputHeight / 2); // Texto de entrada, centralizado verticalmente
 }
+
 
 void generateMockData() {
   for (int i = 0; i < temperatures.length; i++) {
@@ -255,7 +260,7 @@ String getCurrentTime() {
   return timeFormat.format(time);
 }
 
-void drawSensorCircle(String label, float sensorValue, int x, int y) {
+void drawSensorCircle(String label, float sensorValue, float x, float y) {
   fill(0); // Cor do círculo
   ellipse(x, y, 20, 20); // Desenha o círculo
 
@@ -271,7 +276,7 @@ void drawSensorCircle(String label, float sensorValue, int x, int y) {
   text(nf(sensorValue, 0, 2) + " PSI", x + 20, y); // Desenha o valor ao lado
 }
 
-void drawSensorCircleTemp(String label, float sensorValue, int x, int y) {
+void drawSensorCircleTemp(String label, float sensorValue, float x, float y) {
   fill(0); // Cor do círculo
   ellipse(x, y, 20, 20); // Desenha o círculo
 
@@ -289,20 +294,38 @@ void drawSensorCircleTemp(String label, float sensorValue, int x, int y) {
 
 void drawSaveButton() {
   fill(0, 200, 0); // Cor do botão (verde)
-  rect(1115, 375, 100, 30); // Nova posição do botão em (900, 50)
+  rect(width * 0.86, height * 0.505, width * 0.05, height * 0.025); // Nova posição do botão em (900, 50)
   fill(255); // Cor do texto (branco)
   textSize(16);
   textAlign(CENTER, CENTER);
-  text("Save", 1164, 390); // Texto centralizado no botão
+  text("Save", width * 0.885, height * 0.515); // Texto centralizado no botão
 }
 
 // Função para detectar a interação do mouse
 void mousePressed() {
-  // Verifica se o botão de salvar foi clicado na nova posição
-  if (mouseX > 1115 && mouseX < 1215 && mouseY > 375 && mouseY < 405) {
+  // Calcula as dimensões do botão "Save" dinamicamente
+  float saveX = width * 0.86;         // Coordenada X inicial do botão
+  float saveY = height * 0.505;       // Coordenada Y inicial do botão
+  float saveWidth = width * 0.05;     // Largura do botão
+  float saveHeight = height * 0.025;  // Altura do botão
+  
+  /*
+  
+  drawTextInput(userInput1, width * 0.052, height * 0.39, "SN"); //BOX1
+    drawTextInput(userInput2, width * 0.14, height * 0.47, "SN"); //BOX2
+    drawTextInput(userInput3, width * 0.753, height * 0.511, "SN"); //BOX3
+    drawTextInput(userInput4, width * 0.538, height * 0.132, "SN"); //BO4 CONDENSER ASSY
+    drawTextInput(userInput5, width * 0.88, height * 0.4, "SN"); //COMPRESSOR
+    drawTextInput(userInput6, width * 0.7, height * 0.132, "SN"); //FAN
+  
+  */
+
+  // Verifica se o clique foi dentro do botão "Save"
+  if (mouseX > saveX && mouseX < saveX + saveWidth &&
+      mouseY > saveY && mouseY < saveY + saveHeight) {
     saveWithTimestamp(); // Chama a função de salvar
-  } 
-    // Detecta qual campo de entrada foi clicado
+  }
+     // Detecta qual campo de entrada foi clicado
     if (mouseX > 60 && mouseX < 160 && mouseY > 295 && mouseY < 315) {
       currentInput = 0; // Campo userInput1
     } else if (mouseX > 190 && mouseX < 307 && mouseY > 340 && mouseY < 390) {
