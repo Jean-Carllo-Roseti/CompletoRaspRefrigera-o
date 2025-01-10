@@ -12,15 +12,16 @@ CONFIGURACOES = {
         "count": 8,
         "factor": 10,  # Fator de escala da pressão
         "file_name": "dados_pressao.txt",
-        "tipo": "Pressão"
+        "tipo": "Pressão",
+        "formula": lambda valores: [valor / 10 for valor in valores] 
     },
     "temperatura": {
         "unit_id": 2,
         "address": 32,
         "count": 16,
-        "factor": 5,  # Fator de escala da temperatura
         "file_name": "dados_temperatura.txt",
-        "tipo": "Temperatura"
+        "tipo": "Temperatura",
+        "formula": lambda valores: [(valor / 10) - 0.15 for valor in valores]
     }
     #"temperatura2": {
     #    "unit_id": 3,  # Novo unit_id
@@ -76,7 +77,7 @@ def monitorar_dispositivo(client, config):
                     else:
                         # Conversão dos valores
                         valores = leitura.registers
-                        valores_convertidos = [valor / config["factor"] for valor in valores]
+                        valores_convertidos = config["formula"](valores)
 
                         # Escrevendo os valores no arquivo associado
                         escrever_em_arquivo(config["file_name"], valores_convertidos)
