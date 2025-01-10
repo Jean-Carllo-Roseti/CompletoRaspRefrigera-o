@@ -41,28 +41,35 @@ def ler_arquivo_e_transformar_em_array(file_name):
 
 def atribuir_elementos_a_variaveis_pressao(array):
     """
-    Atribui os elementos do array de pressão a variáveis separadas.
+    Atribui os elementos do array de pressão a variáveis separadas, convertendo de PSI para kPa.
     """
+    # Aplicar a conversão de PSI para kPa
+    array_convertido = [valor * 6.89476 for valor in array]
+
     if len(array) != 8:
         print(f"Atenção: O array de pressão contém {len(array)} elementos. Esperado: 8.")
         return {}
 
+    # Atribuir valores a variáveis
     variaveis_pressao = {
-        #"pressao_1": array[0],
-        #"pressao_2": array[1],
-        #"pressao_3": array[2],
-        #"pressao_4": array[3]
-        "pressao_1": 229.87,  # kPa
-        "pressao_2": 2025.79,  # kPa
-        "pressao_3": 1997.55,  # kPa
-        "pressao_4": 254.03   # kPa
+        #"pressao_1": array_convertido[0],
+        #"pressao_2": array_convertido[1],
+        #"pressao_3": array_convertido[2],
+        #"pressao_4": array_convertido[3],
+        "pressao_1": array[0],
+        "pressao_2": array[1],
+        "pressao_3": array[2],
+        "pressao_4": array[3]
     }
+
     return variaveis_pressao
 
 def atribuir_elementos_a_variaveis_temperatura(array):
     """
     Atribui os elementos do array de temperatura a variáveis separadas.
     """
+    array_convertido = [valor + 273.15 for valores in array]
+
     if len(array) != 16:
         print(f"Atenção: O array de temperatura contém {len(array)} elementos. Esperado: 16.")
         return {}
