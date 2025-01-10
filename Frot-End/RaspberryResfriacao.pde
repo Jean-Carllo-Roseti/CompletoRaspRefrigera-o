@@ -414,7 +414,7 @@ void saveWithTimestamp() {
   mensagemTimeout = 50; // Número de frames que a mensagem será exibida (ajuste conforme necessário)
 }
 
-// Função para salvar uma imagem com uma legenda
+
 void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
   // Adiciona o prefixo "SN: " à legenda
   String legendaComPrefixo = "SN: " + legenda;
@@ -422,18 +422,27 @@ void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
   // Cria um novo canvas com a imagem e espaço extra para a legenda
   PGraphics canvas = createGraphics(img.width, img.height + 30); // 30px para a legenda
   canvas.beginDraw();
-  canvas.image(img, 0, 0); // Desenha a imagem no canvas
 
-  // Adiciona a legenda
-  canvas.fill(255); // Cor do texto (preto)
+  // Desenha a imagem no canvas
+  canvas.image(img, 0, 0); 
+
+  // Adiciona o fundo opaco para a legenda
+  canvas.fill(0); // Define a cor preta para o fundo
+  canvas.noStroke(); // Remove as bordas do retângulo
+  canvas.rect(0, img.height, img.width, 30); // Desenha um retângulo preto na área da legenda
+
+  // Adiciona a legenda por cima do fundo
+  canvas.fill(255); // Cor do texto (branco)
   canvas.textSize(16);
   canvas.textAlign(CENTER, CENTER);
   canvas.text(legendaComPrefixo, img.width / 2, img.height + 15); // Legenda centralizada abaixo da imagem
+
   canvas.endDraw();
 
   // Salva a imagem com a legenda
   canvas.save(caminhoSaida);
 }
+
 
 
 
