@@ -13,7 +13,9 @@ CONFIGURACOES = {
         "factor": 10,  # Fator de escala da pressão
         "file_name": "dados_pressao.txt",
         "tipo": "Pressão",
-        "formula": lambda valores: [valor / 10 for valor in valores] 
+        "formula": lambda valores: [
+            ((valor - 500) / (4500 - 500)) * 500 for valor in valores
+        ]
     },
     "temperatura": {
         "unit_id": 2,

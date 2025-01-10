@@ -396,7 +396,6 @@ void keyPressed() {
 }
 
 //bom, alterar apenas para tirar a foto da malha
-
 void saveWithTimestamp() {
   // Gera o timestamp para criar uma pasta única
   String timestamp = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss").format(new Date());
@@ -413,7 +412,6 @@ void saveWithTimestamp() {
   mensagem = "Imagens geradas com sucesso.";
   mensagemTimeout = 50; // Número de frames que a mensagem será exibida (ajuste conforme necessário)
 }
-
 
 void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
   // Adiciona o prefixo "SN: " à legenda
@@ -443,35 +441,19 @@ void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
   canvas.save(caminhoSaida);
 }
 
-
-
-
 void readDataFromFile() {
-  String filePath = "/home/avionics/Desktop/RaspberryResfriacao/valores_sensores.txt";
+  String filePathP = "/home/avionics/Desktop/RaspberryResfriacao/Back-End/dados_pressao.txt";
+  String filePathT = "/home/avionics/Desktop/RaspberryResfriacao/Back-End/dados_temperatura.txt";
 
   try {
-    BufferedReader reader = new BufferedReader(new FileReader(filePath));
+    // Cria BufferedReader para ambos os arquivos
+    BufferedReader readerP = new BufferedReader(new FileReader(filePathP));
+    BufferedReader readerT = new BufferedReader(new FileReader(filePathT));
+
     String line;
 
-    // Lê as temperaturas
-    line = reader.readLine(); // Lê a primeira linha
-    if (line != null) {
-      String[] values = line.split(","); // Divide a linha em valores
-      for (int j = 0; j < values.length && j < temperatures.length; j++) {
-        try {
-          temperatures[j] = Float.parseFloat(values[j].trim()); // Converte para float
-          println("Temperatura lida: " + temperatures[j]); // Verifica o valor lido
-        } catch (NumberFormatException e) {
-          println("Erro ao converter a temperatura na posição " + j + ": " + values[j]);
-        }
-      }
-    } else {
-      println("Nenhuma linha de temperatura encontrada.");
-    }
-
-    // Lê as pressões
-    line = reader.readLine(); // Lê a próxima linha
-    if (line != null) {
+    // Lê todas as linhas de pressão
+    while ((line = readerP.readLine()) != null) {
       String[] values = line.split(","); // Divide a linha em valores
       for (int i = 0; i < values.length && i < pressures.length; i++) {
         try {
@@ -481,11 +463,24 @@ void readDataFromFile() {
           println("Erro ao converter a pressão na posição " + i + ": " + values[i]);
         }
       }
-    } else {
-      println("Nenhuma linha de pressão encontrada.");
     }
 
-    reader.close();
+    // Lê todas as linhas de temperatura
+    while ((line = readerT.readLine()) != null) {
+      String[] values = line.split(","); // Divide a linha em valores
+      for (int j = 0; j < values.length && j < temperatures.length; j++) {
+        try {
+          temperatures[j] = Float.parseFloat(values[j].trim()); // Converte para float
+          println("Temperatura lida: " + temperatures[j]); // Verifica o valor lido
+        } catch (NumberFormatException e) {
+          println("Erro ao converter a temperatura na posição " + j + ": " + values[j]);
+        }
+      }
+    }
+    // Fecha os leitores
+    readerP.close();
+    readerT.close();
+    
   } catch (IOException e) {
     println("Erro ao ler o arquivo: " + e.getMessage());
   }
