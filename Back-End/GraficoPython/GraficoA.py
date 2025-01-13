@@ -52,14 +52,14 @@ def atribuir_elementos_a_variaveis_pressao(array):
 
     # Atribuir valores a variáveis
     variaveis_pressao = {
-        #"pressao_1": array_convertido[0],
-        #"pressao_2": array_convertido[1],
-        #"pressao_3": array_convertido[2],
-        #"pressao_4": array_convertido[3],
-        "pressao_1": 229.87,
-        "pressao_2": 2025.79,
-        "pressao_3": 1997.55,
-        "pressao_4": 254.03
+        #"pressao_1": array_convertido[0], entrada comp 
+        #"pressao_2": array_convertido[1], saida comp
+        #"pressao_3": array_convertido[2], entrada evap
+        #"pressao_4": array_convertido[3], saida evap
+        "pressao_1": 229.87, #229.87       entrada comp
+        "pressao_2": 2025.79, #2025.79     saida comp
+        "pressao_3": 1997.55, #1997.55     entrda evap
+        "pressao_4": 254.03 #254.03        saida evap   
     }
 
     return variaveis_pressao
@@ -76,14 +76,14 @@ def atribuir_elementos_a_variaveis_temperatura(array):
         return {}
 
     variaveis_temperatura = {
-        "temperatura_1": 310.15,  # Kelvin  
-        "temperatura_2": 343.55,  # Kelvin  
-        "temperatura_3": 280.55,  # Kelvin  
-        "temperatura_4": 284.85  # Kelvin 
-        #"temperatura_1": array_convertido[0],
-        #"temperatura_2": array_convertido[1],
-        #"temperatura_3": array_convertido[2],
-        #"temperatura_4": array_convertido[3]
+        "temperatura_1": 310.15,  # Kelvin  310.15 
+        "temperatura_2": 343.55,  # Kelvin  343.55
+        "temperatura_3": 280.55,  # Kelvin  280.55
+        "temperatura_4": 284.85  # Kelvin 284.85
+        #"temperatura_1": array_convertido[0], comp entrada temp
+        #"temperatura_2": array_convertido[1], sainda entrada temp
+        #"temperatura_3": array_convertido[2], evap entrada temp
+        #"temperatura_4": array_convertido[3]  evap saida temp
     }
     return variaveis_temperatura
 
@@ -130,6 +130,15 @@ def plotar_diagrama_mollier():
         plot.calc_isolines(CoolProp.iQ)
         plot.calc_isolines(CoolProp.iT, num=30)
 
+            #consulta de valores de temperaturas da ISOLINES: IMPORTANTE!!
+    # temperaturas = []
+    # for isolinha in plot.isolines[CoolProp.iT]:
+    #     temperaturas.append(isolinha.value)  # Adiciona a temperatura da isolinha à lista
+
+    #     Imprimir as temperaturas das isolinhas
+    # for temp in temperaturas:
+    #     print(f'Temperatura da isolinha: {temp:.2f} K')
+
         plt.plot([entalpias[0], entalpias[1]], [pressões[0], pressões[1]], 'r-')  # Compressão
         plt.plot([entalpias[1], entalpias[2]], [pressões[1], pressões[2]], 'r-')  # Condensação
         plt.plot([entalpias[2], entalpias[4]], [pressões[2], pressões[4]], 'r-')  # Expansão
@@ -138,6 +147,7 @@ def plotar_diagrama_mollier():
 
         plt.xlabel('Entalpia (BTU/LB)')  # Nome do eixo X
         plt.ylabel('Pressao (PSIA)')  # Nome do eixo Y
+        plt.title('Diagrama 1')  # Título do gráfico
 
         plt.xlim(125, 600)  # Limites reais do eixo X (pressão em kPa)
 
@@ -171,9 +181,9 @@ def plotar_diagrama_mollier():
 
         plt.grid(True)
         plt.legend()
-        #plot.show()
+        plot.show()
 
-        plot.savefig(os.path.join('assets', 'imagem.png')) 
+        #plot.savefig(os.path.join('assets', 'imagem.png')) 
 
         caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem.png'
 

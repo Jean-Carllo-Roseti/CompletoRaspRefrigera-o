@@ -7,13 +7,6 @@ from CoolProp.Plots import PropertyPlot
 import os
 import time
 
-#ordem dos valores da cablagem
-#01,02/03,04/ = TEMP MOTOR
-#A11/A12/ = PRESSAO MOTOR 
-
-#05,06/07,08/ = TEMP EVAPORADORA
-#A13/A14 = PRESSAO EVAPORADORA
-
 # Arquivos para leitura
 FILE_PRESSAO = "/home/avionics/Desktop/RaspberryResfriacao/Back-End/dados_pressao.txt"
 FILE_TEMPERATURA = "/home/avionics/Desktop/RaspberryResfriacao/Back-End/dados_temperatura.txt"  
@@ -52,10 +45,10 @@ def atribuir_elementos_a_variaveis_pressao(array):
 
     # Atribuir valores a variáveis
     variaveis_pressao = {
-        #"pressao_1": array_convertido[0],
-        #"pressao_2": array_convertido[1],
-        #"pressao_3": array_convertido[2],
-        #"pressao_4": array_convertido[3],
+        #"pressao_1": array_convertido[0], comp entrada
+        #"pressao_2": array_convertido[1], comp saida
+        #"pressao_3": array_convertido[6], evap entrada
+        #"pressao_4": array_convertido[7], evap saida
         "pressao_1": 229.87,
         "pressao_2": 2025.79,
         "pressao_3": 1997.55,
@@ -76,14 +69,14 @@ def atribuir_elementos_a_variaveis_temperatura(array):
         return {}
 
     variaveis_temperatura = {
-        "temperatura_1": 310.15,  # Kelvin  
-        "temperatura_2": 343.55,  # Kelvin  
-        "temperatura_3": 280.55,  # Kelvin  
-        "temperatura_4": 284.85  # Kelvin 
-        #"temperatura_1": array_convertido[0],
-        #"temperatura_2": array_convertido[1],
-        #"temperatura_3": array_convertido[2],
-        #"temperatura_4": array_convertido[3]
+        "temperatura_1": 310.15,  # Kelvin  entrada comp 
+        "temperatura_2": 343.55,  # Kelvin  saida comp  
+        "temperatura_3": 280.55,  # Kelvin  entrda evap 
+        "temperatura_4": 284.85  # Kelvin  saida evap
+        #"temperatura_1": array_convertido[0], entrada comp 
+        #"temperatura_2": array_convertido[1], saida comp 
+        #"temperatura_3": array_convertido[6], entrada evap 
+        #"temperatura_4": array_convertido[7]  saida evap
     }
     return variaveis_temperatura
 
@@ -112,7 +105,6 @@ def plotar_diagrama_mollier():
     variaveis_pressao = atribuir_elementos_a_variaveis_pressao(array_pressao)
     variaveis_temperatura = atribuir_elementos_a_variaveis_temperatura(array_temperatura)
 
-
     # Passa os valores de pressão extraídos para a função gerar_dados_mollier
     if variaveis_pressao and variaveis_temperatura:
         temperaturas, pressões, entalpias = gerar_dados_mollier(
@@ -138,6 +130,7 @@ def plotar_diagrama_mollier():
 
         plt.xlabel('Entalpia (BTU/LB)')  # Nome do eixo X
         plt.ylabel('Pressao (PSIA)')  # Nome do eixo Y
+        plt.title('Diagrama 3')  # Título do gráfico
 
         plt.xlim(125, 600)  # Limites reais do eixo X (pressão em kPa)
 
@@ -171,19 +164,16 @@ def plotar_diagrama_mollier():
 
         plt.grid(True)
         plt.legend()
-        #plot.show()
+        plot.show()
 
-        plot.savefig(os.path.join('assets', 'imagem.png')) 
+        #plot.savefig(os.path.join('assets', 'imagem.png')) 
 
         caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem3.png'
 
         plot.savefig(caminho_imagem) 
         plt.close('all')  # Libera os recursos de plotagem
 
-        # Forçar coleta de lixo
         
-
-
 if __name__ == "__main__":
     plotar_diagrama_mollier()
 
