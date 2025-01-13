@@ -37,8 +37,9 @@ long lastReadDataTime = 0; // Tempo da última execução da função readDataFr
 int readDataInterval = 2000; // Intervalo para chamar a função (5 segundos, por exemplo)
 
 
-float[] temperatures = new float[25]; // Array para armazenar temperaturas
-float[] pressures = new float[9]; // Array para armazenar pressões
+float[] temperatures = new float[16]; // Array para armazenar temperaturas
+float[] temperatures2 = new float[16];
+float[] pressures = new float[8]; // Array para armazenar pressões
 
 String userInput1 = "";
 String userInput2 = "";
@@ -116,14 +117,14 @@ void draw() {
   }
 
   // Desenha as imagens
-  image(img1, 0, 420, width * 0.33, height * 0.38);  // Imagem 1
-  image(img2, 340, 420, width * 0.33, height * 0.38); // Imagem 2
-  image(img3, 680, 420, width * 0.33, height * 0.38); // Imagem 3
-  image(img4, 30, 20, width * 0.97, height * 0.52);  // Imagem 4 (não atualiza automaticamente, permanece fixa)
+  image(img1, width * 0.01, height * 0.55, width * 0.33, height * 0.38);  // Imagem 1
+  image(img2, width * 0.35, height * 0.55, width * 0.33, height * 0.38); // Imagem 2
+  image(img3, width * 0.67, height * 0.55, width * 0.33, height * 0.38); // Imagem 3
+  image(img4, width * 0.03, height * 0.03, width * 0.97, height * 0.52);  // Imagem 4 (não atualiza automaticamente, permanece fixa)
    
       //BOX1
-    drawSensorCircle("P5", pressures[4], width * 0.147, height * 0.17);
-    drawSensorCircle("P4", pressures[3], width * 0.147, height * 0.267);
+    drawSensorCircle("P4", pressures[3], width * 0.147, height * 0.17);
+    drawSensorCircle("P3", pressures[2], width * 0.147, height * 0.267);
     
     drawSensorCircleTemp("T1", temperatures[0], width * 0.147, height * 0.22);
     drawSensorCircleTemp("T4", temperatures[2], width * 0.064, height * 0.17);
@@ -132,8 +133,8 @@ void draw() {
     drawSensorCircleTemp("T2", temperatures[1], width * 0.147, height * 0.32);
   
     // BOX2
-    drawSensorCircle("P6", pressures[5], width * 0.279, height * 0.485);
-    drawSensorCircle("P7", pressures[6], width * 0.277, height * 0.33);
+    drawSensorCircle("P5", pressures[4], width * 0.279, height * 0.485);
+    drawSensorCircle("P6", pressures[5], width * 0.277, height * 0.33);
     
     drawSensorCircleTemp("TEO", temperatures[9], width * 0.20, height * 0.52);
     drawSensorCircleTemp("T9", temperatures[8], width * 0.325, height * 0.41);
@@ -142,8 +143,8 @@ void draw() {
     drawSensorCircleTemp("T6", temperatures[5], width * 0.277, height * 0.375);
   
     // BOX3
-    drawSensorCircle("P8", pressures[7], width * 0.66, height * 0.46);
-    drawSensorCircle("P9", pressures[8], width * 0.66, height * 0.38);
+    drawSensorCircle("P7", pressures[6], width * 0.66, height * 0.46);
+    drawSensorCircle("P8", pressures[7], width * 0.66, height * 0.38);
     
     drawSensorCircleTemp("T12", temperatures[11], width * 0.66, height * 0.50);
     drawSensorCircleTemp("T11", temperatures[10], width * 0.66, height * 0.42); 
@@ -152,23 +153,22 @@ void draw() {
     drawSensorCircleTemp("TEO", temperatures[14], width * 0.62, height * 0.525);
   
     // BOX4
-    drawSensorCircle("P3", pressures[2], width * 0.505, height * 0.267);
+    #drawSensorCircle("P3", pressures[2], width * 0.505, height * 0.267);
     
     drawSensorCircleTemp("T16", temperatures[15], width * 0.690, height * 0.267);
-    drawSensorCircleTemp("T18", temperatures[17], width * 0.505, height * 0.305);
-    drawSensorCircleTemp("T17", temperatures[16], width * 0.625, height * 0.337);
-    drawSensorCircleTemp("T19", temperatures[18], width * 0.625, height * 0.195);
-    drawSensorCircleTemp("TF20", temperatures[19], width * 0.76, height * 0.18); //FAN  
+    drawSensorCircleTemp("T17", temperatures2[0], width * 0.625, height * 0.337);
+    drawSensorCircleTemp("T19", temperatures2[1], width * 0.625, height * 0.195);
+    drawSensorCircleTemp("TF20", temperatures2[2], width * 0.76, height * 0.18); //FAN  
     
     // LINHAS E EQUIPAMENTOS
     drawSensorCircle("P2", pressures[1], width * 0.78, height * 0.24); // SAIDA MOTOR
-    drawSensorCircleTemp("T23", temperatures[22], width * 0.78, height * 0.29); //SAIDA MOTOR
+    drawSensorCircleTemp("T23", temperatures2[3], width * 0.78, height * 0.29); //SAIDA MOTOR
     
     drawSensorCircle("P1", pressures[0], width * 0.78, height * 0.32); //MOTOR Entrada 
-    drawSensorCircleTemp("T22", temperatures[21], width * 0.78, height * 0.373); //MOTOR entrada
-    drawSensorCircleTemp("TC", temperatures[23], width * 0.90, height * 0.355); //TEMP COMPRESSOR
-    drawSensorCircleTemp("TM", temperatures[24], width * 0.92, height * 0.19); // TEMP MOTOR
-    drawSensorCircleTemp("T21", temperatures[20], width * 0.43, height * 0.17);
+    drawSensorCircleTemp("T22", temperatures2[4], width * 0.78, height * 0.373); //MOTOR entrada
+    drawSensorCircleTemp("TC", temperatures2[5], width * 0.90, height * 0.355); //TEMP COMPRESSOR
+    drawSensorCircleTemp("TM", temperatures2[6], width * 0.92, height * 0.19); // TEMP MOTOR
+    drawSensorCircleTemp("T21", temperatures2[7], width * 0.43, height * 0.17);
     
     drawTextInput(userInput1, width * 0.052, height * 0.39, "SN"); //BOX1
     drawTextInput(userInput2, width * 0.14, height * 0.47, "SN"); //BOX2
@@ -444,11 +444,13 @@ void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
 void readDataFromFile() {
   String filePathP = "/home/avionics/Desktop/RaspberryResfriacao/Back-End/dados_pressao.txt";
   String filePathT = "/home/avionics/Desktop/RaspberryResfriacao/Back-End/dados_temperatura.txt";
+  String filePathT2 = "/home/avionics/Desktop/RaspberryResfriacao/Back-End/dados_temperatura2.txt";
 
   try {
     // Cria BufferedReader para ambos os arquivos
     BufferedReader readerP = new BufferedReader(new FileReader(filePathP));
     BufferedReader readerT = new BufferedReader(new FileReader(filePathT));
+    BufferedReader readerT2 = new BufferedReader(new FileReader(filePathT2));
 
     String line;
 
@@ -477,9 +479,23 @@ void readDataFromFile() {
         }
       }
     }
+    
+        // Lê todas as linhas de temperatura
+    while ((line = readerT2.readLine()) != null) {
+      String[] values = line.split(","); // Divide a linha em valores
+      for (int k = 0; k < values.length && k < temperatures2.length; k++) {
+        try {
+          temperatures2[k] = Float.parseFloat(values[k].trim()); // Converte para float
+          println("Temperatura lida: " + temperatures2[k]); // Verifica o valor lido
+        } catch (NumberFormatException e) {
+          println("Erro ao converter a temperatura na posição " + k + ": " + values[k]);
+        }
+      }
+    }
     // Fecha os leitores
     readerP.close();
     readerT.close();
+    readerT2.close();
     
   } catch (IOException e) {
     println("Erro ao ler o arquivo: " + e.getMessage());

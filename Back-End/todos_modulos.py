@@ -13,8 +13,10 @@ CONFIGURACOES = {
         "factor": 10,  # Fator de escala da pressão
         "file_name": "dados_pressao.txt",
         "tipo": "Pressão",
-        "formula": lambda valores: [
-            ((valor - 500) / (4500 - 500)) * 500 for valor in valores
+                "formula": lambda valores: [
+            ((valor - 500) / (4500 - 500)) * 100 if i in [0, 4, 6, 8] else
+            ((valor - 500) / (4500 - 500)) * 500
+            for i, valor in enumerate(valores)
         ]
     },
     "temperatura": {
@@ -24,15 +26,15 @@ CONFIGURACOES = {
         "file_name": "dados_temperatura.txt",
         "tipo": "Temperatura",
         "formula": lambda valores: [(valor / 10) - 0.15 for valor in valores]
+    },
+    "temperatura2": {
+        "unit_id": 3,
+        "address": 32,
+        "count": 16,
+        "file_name": "dados_temperatura2.txt",
+        "tipo": "Temperatura",
+        "formula": lambda valores: [(valor / 10) - 0.15 for valor in valores]
     }
-    #"temperatura2": {
-    #    "unit_id": 3,  # Novo unit_id
-    #    "address": 32,  # Mesmo endereço, ou outro conforme necessário
-    #    "count": 16,
-    #    "factor": 5,
-    #    "file_name": "dados_temperatura2.txt",  # Novo arquivo
-    #    "tipo": "Temperatura"
-    #} mudar id do proximo leitor de pt1000
 }
 
 # Porta serial compartilhada

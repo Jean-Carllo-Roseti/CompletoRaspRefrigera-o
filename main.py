@@ -23,7 +23,7 @@ async def run_script(script_path):
 async def main():
     # Caminhos absolutos para os scripts
     scripts = [
-        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/gerar_dados.py",
+        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/todos_modulos.py",
         r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoA.py",
         r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoB.py",
         r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoC.py"

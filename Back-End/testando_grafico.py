@@ -56,10 +56,10 @@ def atribuir_elementos_a_variaveis_pressao(array):
         #"pressao_2": array_convertido[1],
         #"pressao_3": array_convertido[2],
         #"pressao_4": array_convertido[3],
-        "pressao_1": array[0],
-        "pressao_2": array[1],
-        "pressao_3": array[2],
-        "pressao_4": array[3]
+        "pressao_1": 229.87,
+        "pressao_2": 2025.79,
+        "pressao_3": 1997.55,
+        "pressao_4": 254.03
     }
 
     return variaveis_pressao
@@ -68,7 +68,8 @@ def atribuir_elementos_a_variaveis_temperatura(array):
     """
     Atribui os elementos do array de temperatura a variáveis separadas.
     """
-    array_convertido = [valor + 273.15 for valores in array]
+    array_convertido = [valor + 273.15 for valor in array]  # Alteração aqui
+
 
     if len(array) != 16:
         print(f"Atenção: O array de temperatura contém {len(array)} elementos. Esperado: 16.")
@@ -79,10 +80,10 @@ def atribuir_elementos_a_variaveis_temperatura(array):
         "temperatura_2": 343.55,  # Kelvin  
         "temperatura_3": 280.55,  # Kelvin  
         "temperatura_4": 284.85  # Kelvin 
-        #"temperatura_1": array[0],
-        #"temperatura_2": array[1],
-        #"temperatura_3": array[2],
-        #"temperatura_4": array[3]
+        #"temperatura_1": array_convertido[0],
+        #"temperatura_2": array_convertido[1],
+        #"temperatura_3": array_convertido[2],
+        #"temperatura_4": array_convertido[3]
     }
     return variaveis_temperatura
 
@@ -170,8 +171,17 @@ def plotar_diagrama_mollier():
 
         plt.grid(True)
         plt.legend()
-
         plot.show()
+
+        # plot.savefig(os.path.join('assets', 'imagem.png')) 
+
+        caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem.png'
+
+        plot.savefig(caminho_imagem) 
+        plt.close('all')  # Libera os recursos de plotagem
+
+        # Forçar coleta de lixo
+        
 
 
 if __name__ == "__main__":
