@@ -155,20 +155,20 @@ void draw() {
     // BOX4
     //drawSensorCircle("P3", pressures[2], width * 0.505, height * 0.267);
     
-    drawSensorCircleTemp("T16", temperatures2[4], width * 0.690, height * 0.267);
-    drawSensorCircleTemp("T17", temperatures2[0], width * 0.625, height * 0.337);
-    drawSensorCircleTemp("T19", temperatures2[1], width * 0.625, height * 0.195);
-    drawSensorCircleTemp("TF20", temperatures2[2], width * 0.76, height * 0.18); //FAN  
+    drawSensorCircleTemp("T16", temperatures2[0], width * 0.690, height * 0.267);
+    drawSensorCircleTemp("T17", temperatures2[1], width * 0.625, height * 0.337);
+    drawSensorCircleTemp("T18", temperatures2[2], width * 0.625, height * 0.195);
+    drawSensorCircleTemp("TF19", temperatures2[3], width * 0.76, height * 0.18); //FAN  
     
     // LINHAS E EQUIPAMENTOS
     drawSensorCircle("P2", pressures[1], width * 0.78, height * 0.24); // SAIDA COMPRESSOR
     drawSensorCircleTemp("T23", temperatures[1], width * 0.78, height * 0.29); //SAIDA MOTOR
     
     drawSensorCircle("P1", pressures[0], width * 0.78, height * 0.32); //MOTOR Entrada 
-    drawSensorCircleTemp("T22",temperatures[0], width * 0.78, height * 0.373); //MOTOR entrada
-    drawSensorCircleTemp("TC", temperatures2[5], width * 0.90, height * 0.355); //TEMP COMPRESSOR
-    drawSensorCircleTemp("TM", temperatures2[6], width * 0.92, height * 0.19); // TEMP MOTOR
-    drawSensorCircleTemp("T21", temperatures2[7], width * 0.43, height * 0.17);
+    drawSensorCircleTemp("T21",temperatures[0], width * 0.78, height * 0.373); //MOTOR entrada
+    drawSensorCircleTemp("TC", temperatures2[4], width * 0.90, height * 0.355); //TEMP COMPRESSOR
+    drawSensorCircleTemp("TM", temperatures2[5], width * 0.92, height * 0.19); // TEMP MOTOR
+    drawSensorCircleTemp("T20", temperatures2[6], width * 0.43, height * 0.17);
     
     drawTextInput(userInput1, width * 0.052, height * 0.39, "SN"); //BOX1
     drawTextInput(userInput2, width * 0.14, height * 0.47, "SN"); //BOX2
