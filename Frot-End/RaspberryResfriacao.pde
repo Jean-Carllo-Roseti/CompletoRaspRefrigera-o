@@ -150,16 +150,17 @@ void draw() {
     drawSensorCircleTemp("T11", temperatures[6], width * 0.66, height * 0.42); 
     drawSensorCircleTemp("T14", temperatures[14], width * 0.53, height * 0.41);
     drawSensorCircleTemp("T13", temperatures[15], width * 0.53, height * 0.38);
-    drawSensorCircleTemp("TEO", temperatures2[3], width * 0.62, height * 0.525);
+    drawSensorCircleTemp("TEO", temperatures2[7], width * 0.62, height * 0.525);
   
     // BOX4
-    //drawSensorCircle("P3", pressures[2], width * 0.505, height * 0.267);
+    drawSensorCircle("P9", pressures[2], width * 0.505, height * 0.267); //PRECISA DO NOVO MODULO pressure2
     
     drawSensorCircleTemp("T16", temperatures2[0], width * 0.690, height * 0.267);
     drawSensorCircleTemp("T17", temperatures2[1], width * 0.625, height * 0.337);
     drawSensorCircleTemp("T18", temperatures2[2], width * 0.625, height * 0.195);
     drawSensorCircleTemp("TF19", temperatures2[3], width * 0.76, height * 0.18); //FAN  
-    
+    drawSensorCircleTemp("T24", temperatures2[8], width * 0.505, height * 0.315);
+
     // LINHAS E EQUIPAMENTOS
     drawSensorCircle("P2", pressures[1], width * 0.78, height * 0.24); // SAIDA COMPRESSOR
     drawSensorCircleTemp("T23", temperatures[1], width * 0.78, height * 0.29); //SAIDA MOTOR
