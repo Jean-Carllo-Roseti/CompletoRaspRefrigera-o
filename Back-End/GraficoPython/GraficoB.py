@@ -165,7 +165,7 @@ def plotar_diagrama_mollier():
         plt.legend()
         #plot.show()
 
-        plot.savefig(os.path.join('assets', 'imagem.png')) 
+        #plot.savefig(os.path.join('assets', 'imagem.png')) 
 
         caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem2.png'
 
