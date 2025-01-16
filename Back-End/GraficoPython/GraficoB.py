@@ -45,14 +45,14 @@ def atribuir_elementos_a_variaveis_pressao(array):
 
     # Atribuir valores a variáveis
     variaveis_pressao = {
-        #"pressao_1": array_convertido[0], comp entrada
-        #"pressao_2": array_convertido[1], comp saida
-        #"pressao_3": array_convertido[4], evap entrada
-        #"pressao_4": array_convertido[5], evap saida
-        "pressao_1": 229.87,
-        "pressao_2": 2025.79,
-        "pressao_3": 1997.55,
-        "pressao_4": 254.03
+        "pressao_1": array_convertido[0], #comp entrada
+        "pressao_2": array_convertido[1], #comp saida
+        "pressao_3": array_convertido[4], #evap entrada
+        "pressao_4": array_convertido[5], #evap saida
+        #"pressao_1": 229.87,
+        #"pressao_2": 2025.79,
+        #"pressao_3": 1997.55,
+        #"pressao_4": 254.03
     }
 
     return variaveis_pressao
@@ -69,14 +69,14 @@ def atribuir_elementos_a_variaveis_temperatura(array):
         return {}
 
     variaveis_temperatura = {
-        "temperatura_1": 310.15,  # Kelvin  
-        "temperatura_2": 343.55,  # Kelvin  
-        "temperatura_3": 280.55,  # Kelvin  
-        "temperatura_4": 284.85  # Kelvin 
-        #"temperatura_1": array_convertido[0],  entrada comp
-        #"temperatura_2": array_convertido[1],  saida comp 
-        #"temperatura_3": array_convertido[5],  evap entrada 
-        #"temperatura_4": array_convertido[4]   evap saida 
+        #"temperatura_1": 310.15,  # Kelvin  
+        #"temperatura_2": 343.55,  # Kelvin  
+        #"temperatura_3": 280.55,  # Kelvin  
+        #"temperatura_4": 284.85  # Kelvin 
+        "temperatura_1": array_convertido[0], #entrada comp
+        "temperatura_2": array_convertido[1], #saida comp 
+        "temperatura_3": array_convertido[5], #evap entrada 
+        "temperatura_4": array_convertido[4]  #evap saida 
     }
     return variaveis_temperatura
 
@@ -163,9 +163,9 @@ def plotar_diagrama_mollier():
 
         plt.grid(True)
         plt.legend()
-        plot.show()
+        #plot.show()
 
-        #plot.savefig(os.path.join('assets', 'imagem.png')) 
+        plot.savefig(os.path.join('assets', 'imagem.png')) 
 
         caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem2.png'
 

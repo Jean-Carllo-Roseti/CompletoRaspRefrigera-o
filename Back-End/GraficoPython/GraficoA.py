@@ -52,14 +52,14 @@ def atribuir_elementos_a_variaveis_pressao(array):
 
     # Atribuir valores a variáveis
     variaveis_pressao = {
-        #"pressao_1": array_convertido[0], entrada comp 
-        #"pressao_2": array_convertido[1], saida comp
-        #"pressao_3": array_convertido[2], entrada evap
-        #"pressao_4": array_convertido[3], saida evap
-        "pressao_1": 229.87, #229.87       entrada comp
-        "pressao_2": 2025.79, #2025.79     saida comp
-        "pressao_3": 1997.55, #1997.55     entrda evap
-        "pressao_4": 254.03 #254.03        saida evap   
+        "pressao_1": array_convertido[0], #entrada comp 
+        "pressao_2": array_convertido[1], #saida comp
+        "pressao_3": array_convertido[2], #entrada evap
+        "pressao_4": array_convertido[3], #saida evap
+        #"pressao_1": 229.87, #229.87       entrada comp
+        #"pressao_2": 2025.79, #2025.79     saida comp
+        #"pressao_3": 1997.55, #1997.55     entrda evap
+        #"pressao_4": 254.03 #254.03        saida evap   
     }
 
     return variaveis_pressao
@@ -76,14 +76,14 @@ def atribuir_elementos_a_variaveis_temperatura(array):
         return {}
 
     variaveis_temperatura = {
-        "temperatura_1": 310.15,  # Kelvin  310.15 
-        "temperatura_2": 343.55,  # Kelvin  343.55
-        "temperatura_3": 280.55,  # Kelvin  280.55
-        "temperatura_4": 284.85  # Kelvin 284.85
-        #"temperatura_1": array_convertido[0], comp entrada temp
-        #"temperatura_2": array_convertido[1], sainda entrada temp
-        #"temperatura_3": array_convertido[2], evap entrada temp
-        #"temperatura_4": array_convertido[3]  evap saida temp
+        #"temperatura_1": 310.15,  # Kelvin  310.15 
+        #"temperatura_2": 343.55,  # Kelvin  343.55
+        #"temperatura_3": 280.55,  # Kelvin  280.55
+        #"temperatura_4": 284.85  # Kelvin 284.85
+        "temperatura_1": array_convertido[0], #comp entrada temp
+        "temperatura_2": array_convertido[1], #sainda entrada temp
+        "temperatura_3": array_convertido[2], #evap entrada temp
+        "temperatura_4": array_convertido[3]  #evap saida temp
     }
     return variaveis_temperatura
 
@@ -181,9 +181,9 @@ def plotar_diagrama_mollier():
 
         plt.grid(True)
         plt.legend()
-        plot.show()
+        #plot.show()
 
-        #plot.savefig(os.path.join('assets', 'imagem.png')) 
+        plot.savefig(os.path.join('assets', 'imagem.png')) 
 
         caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem.png'
 
