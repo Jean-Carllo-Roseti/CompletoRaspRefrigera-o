@@ -4,6 +4,9 @@ import signal
 import sys
 import threading
 
+CAMINHO_BASE = "/home/avionics/Desktop/RaspberryResfriacao/Back-End/"
+
+
 # Configurações dos dispositivos e arquivos
 CONFIGURACOES = {
     "pressao": {
@@ -11,19 +14,21 @@ CONFIGURACOES = {
         "address": 0,
         "count": 8,
         "factor": 10,  # Fator de escala da pressão
-        "file_name": "dados_pressao.txt",
+        "file_name": f"{CAMINHO_BASE}dados_pressao.txt",  # Caminho absoluto,
         "tipo": "Pressão",
-                "formula": lambda valores: [
-            ((valor - 500) / (4500 - 500)) * 100 if i in [0, 4, 6, 8] else
-            ((valor - 500) / (4500 - 500)) * 500
-            for i, valor in enumerate(valores)
-        ]
+            "formula": lambda valores: [
+                ((((valor - 500) / (4500 - 500)) * 100) + 1.5) if i in [0, 3, 7] else
+                ((((valor - 500) / (4500 - 500)) * 100) + 42.01) if i == 5 else
+                ((((valor - 500) / (4500 - 500)) * 500) + 1.5)
+                for i, valor in enumerate(valores)
+]
+
     },
     "temperatura": {
         "unit_id": 2,
         "address": 32,
         "count": 16,
-        "file_name": "dados_temperatura.txt",
+        "file_name":  f"{CAMINHO_BASE}dados_temperatura.txt",
         "tipo": "Temperatura",
         "formula": lambda valores: [(valor / 10) - 0.15 for valor in valores]
     },
@@ -31,7 +36,7 @@ CONFIGURACOES = {
         "unit_id": 3,
         "address": 32,
         "count": 16,
-        "file_name": "dados_temperatura2.txt",
+        "file_name":  f"{CAMINHO_BASE}dados_temperatura2.txt",
         "tipo": "Temperatura",
         "formula": lambda valores: [(valor / 10) - 0.15 for valor in valores]
     }

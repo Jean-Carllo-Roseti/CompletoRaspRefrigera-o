@@ -153,7 +153,7 @@ void draw() {
     drawSensorCircleTemp("TEO", temperatures2[7], width * 0.62, height * 0.525);
   
     // BOX4
-    drawSensorCircle("P9", pressures[2], width * 0.505, height * 0.267); //PRECISA DO NOVO MODULO pressure2
+    //drawSensorCircle("P9", pressures[0], width * 0.505, height * 0.267); //PRECISA DO NOVO MODULO pressure2
     
     drawSensorCircleTemp("T16", temperatures2[0], width * 0.690, height * 0.267);
     drawSensorCircleTemp("T17", temperatures2[1], width * 0.625, height * 0.337);
