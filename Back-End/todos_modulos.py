@@ -5,9 +5,8 @@ import sys
 import threading
 
 
-diretorio_atual = os.path.dirname(__file__)
-CAMINHO_BASE = diretorio_atual
-#CAMINHO_BASE = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/"
+
+CAMINHO_BASE = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/"
 
 # Configurações dos dispositivos e arquivos
 CONFIGURACOES = {
