@@ -7,9 +7,12 @@ from CoolProp.Plots import PropertyPlot
 import os
 import time
 
-# Arquivos para leitura
-FILE_PRESSAO = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_pressao.txt"
-FILE_TEMPERATURA = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_temperatura.txt"  
+diretorio_atual = os.path.dirname(__file__)
+caminho_arquivo_pressao = os.path.join(diretorio_atual, '..', 'dados_pressao.txt')
+caminho_arquivo_temperatura = os.path.join(diretorio_atual, '..', 'dados_temperatura.txt')
+
+FILE_PRESSAO = caminho_arquivo_pressao
+FILE_TEMPERATURA = caminho_arquivo_temperatura
 
 def ler_arquivo_e_transformar_em_array(file_name):
     """
@@ -163,7 +166,7 @@ def plotar_diagrama_mollier():
 
         plt.grid(True)
         plt.legend()
-        plot.show()
+        #plot.show()
 
         plot.savefig(os.path.join('assets', 'imagem2.png')) 
 

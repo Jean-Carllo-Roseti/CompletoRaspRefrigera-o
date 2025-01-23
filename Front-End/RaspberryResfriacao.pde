@@ -10,8 +10,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-
-
+String diretorio_atual = sketchPath();
 String mensagem = ""; // Variável para armazenar a mensagem de sucesso
 int mensagemTimeout = 0; // Tempo restante para exibir a mensagem
 
@@ -60,7 +59,6 @@ void setup() {
 
   lastUpdateTime = millis(); // Armazena o tempo inicial de execução
   readDataFromFile();
-  
   
   posicoes = new PVector[]{
       new PVector(width * 0.085, height * 0.19),  // Air Out BOX 1
@@ -129,14 +127,14 @@ void draw() {
     drawSensorCircleTemp("T1", temperatures[3], width * 0.147, height * 0.22);
     drawSensorCircleTemp("T4", temperatures[8], width * 0.064, height * 0.17);
     drawSensorCircleTemp("T3", temperatures[9], width * 0.064, height * 0.21);
-    drawSensorCircleTemp("TEO", temperatures[10], width * 0.061, height * 0.34);
+    //drawSensorCircleTemp("TEO", temperatures[10], width * 0.061, height * 0.34);
     drawSensorCircleTemp("T2", temperatures[2], width * 0.147, height * 0.32);
   
     // BOX2
     drawSensorCircle("P5", pressures[4], width * 0.279, height * 0.485);
     drawSensorCircle("P6", pressures[5], width * 0.277, height * 0.33);
     
-    drawSensorCircleTemp("TEO", temperatures[11], width * 0.20, height * 0.52);
+    //drawSensorCircleTemp("TEO", temperatures[11], width * 0.20, height * 0.52);
     drawSensorCircleTemp("T9", temperatures[12], width * 0.325, height * 0.41);
     drawSensorCircleTemp("T8", temperatures[13], width * 0.325, height * 0.45);
     drawSensorCircleTemp("T7", temperatures[5], width * 0.279, height * 0.52);
@@ -150,10 +148,10 @@ void draw() {
     drawSensorCircleTemp("T11", temperatures[6], width * 0.66, height * 0.42); 
     drawSensorCircleTemp("T14", temperatures[14], width * 0.53, height * 0.41);
     drawSensorCircleTemp("T13", temperatures[15], width * 0.53, height * 0.38);
-    drawSensorCircleTemp("TEO", temperatures2[7], width * 0.62, height * 0.525);
+    //drawSensorCircleTemp("TEO", temperatures2[7], width * 0.62, height * 0.525);
   
     // BOX4
-    //drawSensorCircle("P9", pressures[2], width * 0.505, height * 0.267); //PRECISA DO NOVO MODULO pressure2
+    //drawSensorCircle("P9", pressures[0], width * 0.505, height * 0.267); //PRECISA DO NOVO MODULO pressure2
     
     drawSensorCircleTemp("T16", temperatures2[0], width * 0.690, height * 0.267);
     drawSensorCircleTemp("T17", temperatures2[1], width * 0.625, height * 0.337);
@@ -163,12 +161,12 @@ void draw() {
 
     // LINHAS E EQUIPAMENTOS
     drawSensorCircle("P2", pressures[1], width * 0.78, height * 0.24); // SAIDA COMPRESSOR
-    drawSensorCircleTemp("T22", temperatures[1], width * 0.78, height * 0.29); //SAIDA MOTOR
+    drawSensorCircleTemp("T23", temperatures[1], width * 0.78, height * 0.29); //SAIDA MOTOR
     
     drawSensorCircle("P1", pressures[0], width * 0.78, height * 0.32); //MOTOR Entrada 
     drawSensorCircleTemp("T21",temperatures[0], width * 0.78, height * 0.373); //MOTOR entrada
-    drawSensorCircleTemp("TC", temperatures2[4], width * 0.90, height * 0.355); //TEMP COMPRESSOR
-    drawSensorCircleTemp("TM", temperatures2[5], width * 0.92, height * 0.19); // TEMP MOTOR
+    //drawSensorCircleTemp("TC", temperatures2[4], width * 0.90, height * 0.355); //TEMP COMPRESSOR
+    //drawSensorCircleTemp("TM", temperatures2[5], width * 0.92, height * 0.19); // TEMP MOTOR
     drawSensorCircleTemp("T20", temperatures2[6], width * 0.43, height * 0.17);
     
     drawTextInput(userInput1, width * 0.052, height * 0.39, "SN"); //BOX1
@@ -360,7 +358,6 @@ void mousePressed() {
   }
 }
 
-
 void keyPressed() {
   // Remoção de caracteres com BACKSPACE
   if (key == BACKSPACE) {
@@ -400,7 +397,7 @@ void keyPressed() {
 void saveWithTimestamp() {
   // Gera o timestamp para criar uma pasta única
   String timestamp = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss").format(new Date());
-  String folderPath = "/home/avionics/Refri/CompletoRaspRefrigera-o/ScrenShots/Registros/" + timestamp;
+  String folderPath = "/home/avionics/Refri/CompletoRaspRefrigera/ScrenShots/Registros/" + timestamp;
   new File(folderPath).mkdir(); // Cria a pasta com o timestamp
 
   // Salvando cada imagem com sua legenda

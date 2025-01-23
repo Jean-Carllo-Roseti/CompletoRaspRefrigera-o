@@ -14,6 +14,11 @@ import time
 #05,06/07,08/ = TEMP EVAPORADORA
 #A13/A14 = PRESSAO EVAPORADORA
 
+
+diretorio_atual = os.path.dirname(__file__)
+caminho_arquivo_pressao = os.path.join(diretorio_atual, '..', 'dados_pressao.txt')
+caminho_arquivo_temperatura = os.path.join(diretorio_atual, '..', 'dados_temperatura.txt')
+
 # Arquivos para leitura
 FILE_PRESSAO = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_pressao.txt"
 FILE_TEMPERATURA = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_temperatura.txt"  
@@ -181,7 +186,7 @@ def plotar_diagrama_mollier():
 
         plt.grid(True)
         plt.legend()
-        plot.show()
+        #plot.show()
 
         plot.savefig(os.path.join('assets', 'imagem.png')) 
 

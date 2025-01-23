@@ -4,6 +4,11 @@ import signal
 import sys
 import threading
 
+
+diretorio_atual = os.path.dirname(__file__)
+CAMINHO_BASE = diretorio_atual
+#CAMINHO_BASE = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/"
+
 # Configurações dos dispositivos e arquivos
 CONFIGURACOES = {
     "pressao": {
@@ -11,19 +16,20 @@ CONFIGURACOES = {
         "address": 0,
         "count": 8,
         "factor": 10,  # Fator de escala da pressão
-        "file_name": "dados_pressao.txt",
+        "file_name": f"{CAMINHO_BASE}dados_pressao.txt",  # Caminho absoluto,
         "tipo": "Pressão",
-                "formula": lambda valores: [
-            ((valor - 500) / (4500 - 500)) * 100 if i in [0, 3, 5, 7] else
-            ((valor - 500) / (4500 - 500)) * 500
-            for i, valor in enumerate(valores)
-        ]
+            "formula": lambda valores: [
+                ((((valor - 500) / (4500 - 500)) * 100) ) if i in [0, 3, 5, 7] else
+                #((((valor - 500) / (4500 - 500)) * 100) + 25.01) if i == 5 else
+                ((((valor - 500) / (4500 - 500)) * 500) )
+                for i, valor in enumerate(valores)
+]
     },
     "temperatura": {
         "unit_id": 2,
         "address": 32,
         "count": 16,
-        "file_name": "dados_temperatura.txt",
+        "file_name":  f"{CAMINHO_BASE}dados_temperatura.txt",
         "tipo": "Temperatura",
         "formula": lambda valores: [(valor / 10) - 0.15 for valor in valores]
     },
@@ -31,7 +37,7 @@ CONFIGURACOES = {
         "unit_id": 3,
         "address": 32,
         "count": 16,
-        "file_name": "dados_temperatura2.txt",
+        "file_name":  f"{CAMINHO_BASE}dados_temperatura2.txt",
         "tipo": "Temperatura",
         "formula": lambda valores: [(valor / 10) - 0.15 for valor in valores]
     }
@@ -87,9 +93,9 @@ def monitorar_dispositivo(client, config):
                         escrever_em_arquivo(config["file_name"], valores_convertidos)
 
                         # Exibindo os valores no console
-                        print(f"\n{config['tipo']} (Registros e Valores Convertidos):")
-                        for i, valor in enumerate(valores):
-                            print(f"Registro {i + 1}: {valor} (Convertido: {valores_convertidos[i]:.2f})")
+                        #print(f"\n{config['tipo']} (Registros e Valores Convertidos):")
+                        #for i, valor in enumerate(valores):
+                        #    print(f"Registro {i + 1}: {valor} (Convertido: {valores_convertidos[i]:.2f})")
 
                 except Exception as e:
                     print(f"Erro no dispositivo {config['tipo']}: {e}")
@@ -97,14 +103,11 @@ def monitorar_dispositivo(client, config):
         # Intervalo entre leituras
         time.sleep(1)
 
-
-
 # Tratamento de interrupção (Ctrl+C)
 def signal_handler(sig, frame):
     print('\nInterrupção detectada. Fechando conexão...')
     client.close()
     sys.exit(0)
-
 
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -117,7 +120,6 @@ client = ModbusSerialClient(
     stopbits=1,
     bytesize=8
 )
-
 
 # Conexão ao dispositivo
 if client.connect():
