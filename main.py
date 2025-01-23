@@ -1,4 +1,8 @@
 import asyncio
+import os
+
+#caminhi para o diretório onde o script main.py esta localizado.
+#base_path = os.path.dirname(os.path.realpath(__file__))
 
 # Função para rodar um script Python em um subprocesso assíncrono
 async def run_script(script_path):
@@ -23,10 +27,10 @@ async def run_script(script_path):
 async def main():
     # Caminhos absolutos para os scripts
     scripts = [
-        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/gerar_dados.py",
-        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoA.py",
-        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoB.py",
-        r"/home/avionics/Desktop/RaspberryResfriacao/Back-End/GraficoPython/GraficoC.py"
+        r"/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/GraficoPython/gerar_dados.py",
+        r"/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoA.py",
+        r"/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoB.py",
+        r"/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoC.py"
     ]
 
     # Cria tarefas para executar os scripts em paralelo
