@@ -96,8 +96,8 @@ void setup() {
       new PVector(width * 0.13, height * 0.075),  //  Roxo
       new PVector(width * 0.13, height * 0.1),  //  AZUL
       
-      new PVector(width * 0.88, height * 0.51),  // Data
-      new PVector(width * 0.88, height * 0.525)  // Hora
+      new PVector(width * 0.9, height * 0.51),  // Data
+      new PVector(width * 0.9, height * 0.525)  // Hora
   };
 }
 
