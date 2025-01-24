@@ -6,7 +6,7 @@ import threading
 
 
 
-CAMINHO_BASE = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/"
+CAMINHO_BASE = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/"
 
 # Configurações dos dispositivos e arquivos
 CONFIGURACOES = {

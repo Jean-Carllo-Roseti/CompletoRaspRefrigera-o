@@ -24,10 +24,10 @@ String[] palavras = {"Air Out", "Air In", "Condenser Fan", "Condenser Assy", "Ai
 "Air Out", "Temp In", "Temp Out", "Air In", "In", "Out", "Freon Out", "Freon In", "Suction - Gasous Freon", "Pressure - Gaseous Freon", " Pressure - Liquid Freon "};
 PVector[] posicoes;
 
-String caminhoImagem1 = "/home/avionics/Refri/CompletoRaspRefrigera-o/assets/images/imagem.png";
-String caminhoImagem2 = "/home/avionics/Refri/CompletoRaspRefrigera-o/assets/images/imagem2.png";
-String caminhoImagem3 = "/home/avionics/Refri/CompletoRaspRefrigera-o/assets/images/imagem3.png";
-String caminhoImagem4 = "/home/avionics/Refri/CompletoRaspRefrigera-o/assets/images/FotoMalha.png";
+String caminhoImagem1 = "/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem.png";
+String caminhoImagem2 = "/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem2.png";
+String caminhoImagem3 = "/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem3.png";
+String caminhoImagem4 = "/home/avionics/Refri/CompletoRaspRefrigera/assets/images/FotoMalha.png";
 
 long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios PARA DADOS MOCADOS, TEST.
 int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (2 segundos)
@@ -440,9 +440,9 @@ void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
 }
 
 void readDataFromFile() {
-  String filePathP = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_pressao.txt";
-  String filePathT = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_temperatura.txt";
-  String filePathT2 = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_temperatura2.txt";
+  String filePathP = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_pressao.txt";
+  String filePathT = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_temperatura.txt";
+  String filePathT2 = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_temperatura2.txt";
 
   try {
     // Cria BufferedReader para ambos os arquivos

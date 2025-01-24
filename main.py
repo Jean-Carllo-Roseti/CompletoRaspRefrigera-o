@@ -27,10 +27,10 @@ async def run_script(script_path):
 async def main():
     # Caminhos absolutos para os scripts
     scripts = [
-        r"/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/todos_modulos.py",
-        r"/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoA.py",
-        r"/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoB.py",
-        r"/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoC.py"
+        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/todos_modulos.py",
+        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoA.py",
+        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoB.py",
+        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoC.py"
     ]
 
     # Cria tarefas para executar os scripts em paralelo

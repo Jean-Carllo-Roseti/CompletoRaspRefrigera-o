@@ -20,8 +20,8 @@ caminho_arquivo_pressao = os.path.join(diretorio_atual, '..', 'dados_pressao.txt
 caminho_arquivo_temperatura = os.path.join(diretorio_atual, '..', 'dados_temperatura.txt')
 
 # Arquivos para leitura
-FILE_PRESSAO = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_pressao.txt"
-FILE_TEMPERATURA = "/home/avionics/Refri/CompletoRaspRefrigera-o/Back-End/dados_temperatura.txt"  
+FILE_PRESSAO = caminho_arquivo_pressao
+FILE_TEMPERATURA = caminho_arquivo_temperatura 
 
 def ler_arquivo_e_transformar_em_array(file_name):
     """
