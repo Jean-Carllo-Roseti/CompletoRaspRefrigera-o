@@ -30,12 +30,8 @@ String caminhoImagem2 = "/home/avionics/Desktop/RaspberryResfriacao/assets/image
 String caminhoImagem3 = "/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem3.png";
 String caminhoImagem4 = "/home/avionics/Desktop/RaspberryResfriacao/assets/images/FotoMalha.png";
 
-long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios PARA DADOS MOCADOS, TEST.
-int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (2 segundos)
-
 long lastReadDataTime = 0; // Tempo da última execução da função readDataFromFile PARA DADOS REAIS
 int readDataInterval = 2000; // Intervalo para chamar a função (5 segundos, por exemplo)
-
 
 float[] temperatures = new float[16]; // Array para armazenar temperaturas
 float[] temperatures2 = new float[16];
@@ -60,7 +56,6 @@ void setup() {
 
   lastUpdateTime = millis(); // Armazena o tempo inicial de execução
   readDataFromFile();
-  
   
   posicoes = new PVector[]{
       new PVector(width * 0.085, height * 0.19),  // Air Out BOX 1
@@ -178,12 +173,6 @@ void draw() {
     drawTextInput(userInput5, width * 0.88, height * 0.4, "SN"); //COMPRESSOR
     drawTextInput(userInput6, width * 0.7, height * 0.132, "SN"); //FAN
     
-  /*
-   if (millis() - lastMockUpdateTime > mockUpdateInterval) {
-    generateMockData();
-    lastMockUpdateTime = millis(); // Atualiza o tempo de última atualização
-  }
-  */
   
   if (millis() - lastReadDataTime > readDataInterval) {
     readDataFromFile(); // Chama a função para ler os dados do arquivo
@@ -218,15 +207,6 @@ void drawTextInput(String inputText, float x, float y, String label) {
   text(label + ": " + inputText, x + 5, y + inputHeight / 2); // Texto de entrada, centralizado verticalmente
 }
 
-
-void generateMockData() {
-  for (int i = 0; i < temperatures.length; i++) {
-    temperatures[i] = random(15, 30); // Gera temperaturas aleatórias entre 15 e 30
-  }
-  for (int i = 0; i < pressures.length; i++) {
-    pressures[i] = random(20, 180); // Gera pressões aleatórias entre 95000 e 105000 Pa
-  }
-}
 
 void drawPalavras() {
   fill(0); // Cor do texto
