@@ -16,10 +16,10 @@ CONFIGURACOES = {
         "factor": 10,  # Fator de escala da pressão
         "file_name": f"{CAMINHO_BASE}dados_pressao.txt",  # Caminho absoluto,
         "tipo": "Pressão",
-            "formula": lambda valores: [
-                ((((valor - 500) / (4500 - 500)) * 100) ) if i in [0, 3, 7] else
-                ((((valor - 500) / (4500 - 500)) * 100) + 25.01) if i == 5 else
-                ((((valor - 500) / (4500 - 500)) * 500) )
+            "formula": lambda valores: [ 
+                (((((valor / 3) - 500) / (4500 - 500)) * 100) ) if i in [0, 3, 7] else
+                (((((valor / 3) - 500) / (4500 - 500)) * 100) + 25.01) if i == 5 else
+                (((((valor / 3) - 500) / (4500 - 500)) * 500) )
                 for i, valor in enumerate(valores)
 ]
 
@@ -92,9 +92,9 @@ def monitorar_dispositivo(client, config):
                         escrever_em_arquivo(config["file_name"], valores_convertidos)
 
                         # Exibindo os valores no console
-                        #print(f"\n{config['tipo']} (Registros e Valores Convertidos):")
-                        #for i, valor in enumerate(valores):
-                        #    print(f"Registro {i + 1}: {valor} (Convertido: {valores_convertidos[i]:.2f})")
+                        print(f"\n{config['tipo']} (Registros e Valores Convertidos):")
+                        for i, valor in enumerate(valores):
+                            print(f"Registro {i + 1}: {valor} (Convertido: {valores_convertidos[i]:.2f})")
 
                 except Exception as e:
                     print(f"Erro no dispositivo {config['tipo']}: {e}")
