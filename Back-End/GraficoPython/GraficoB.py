@@ -45,14 +45,14 @@ def atribuir_elementos_a_variaveis_pressao(array):
 
     # Atribuir valores a variáveis
     variaveis_pressao = {
-        "pressao_1": array_convertido[0], #comp entrada
-        "pressao_2": array_convertido[1], #comp saida
-        "pressao_3": array_convertido[4], #evap entrada
-        "pressao_4": array_convertido[5], #evap saida
-        #"pressao_1": 229.87,
-        #"pressao_2": 2025.79,
-        #"pressao_3": 1997.55,
-        #"pressao_4": 254.03
+        #"pressao_1": array_convertido[0], #comp entrada
+        #"pressao_2": array_convertido[1], #comp saida
+        #"pressao_3": array_convertido[4], #evap entrada
+        #"pressao_4": array_convertido[5], #evap saida
+        "pressao_1": 229.87,
+        "pressao_2": 2025.79,
+        "pressao_3": 1997.55,
+        "pressao_4": 254.03
     }
 
     return variaveis_pressao
@@ -69,14 +69,14 @@ def atribuir_elementos_a_variaveis_temperatura(array):
         return {}
 
     variaveis_temperatura = {
-        #"temperatura_1": 310.15,  # Kelvin  
-        #"temperatura_2": 343.55,  # Kelvin  
-        #"temperatura_3": 280.55,  # Kelvin  
-        #"temperatura_4": 284.85  # Kelvin 
-        "temperatura_1": array_convertido[0], #entrada comp
-        "temperatura_2": array_convertido[1], #saida comp 
-        "temperatura_3": array_convertido[5], #evap entrada 
-        "temperatura_4": array_convertido[4]  #evap saida 
+        "temperatura_1": 310.15,  # Kelvin  
+        "temperatura_2": 343.55,  # Kelvin  
+        "temperatura_3": 332.15,  # Kelvin  
+        "temperatura_4": 284.85  # Kelvin 
+        #"temperatura_1": array_convertido[0], #entrada comp
+        #"temperatura_2": array_convertido[1], #saida comp 
+        #"temperatura_3": array_convertido[5], #evap entrada 
+        #"temperatura_4": array_convertido[4]  #evap saida 
     }
     return variaveis_temperatura
 
@@ -142,20 +142,20 @@ def plotar_diagrama_mollier():
         ticks_y = [28, 38, 48, 90, 140, 300, 440, 580, 760, 1400, 2800, 4000, 5000, 6000]  # Ticks logarítmicos em kPa
         labels_y = [4, 6, 8, 10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000]
 
-        plt.yticks(ticks_y, labels_y)  # Define os ticks e os rótulos do eixo Y
+        #plt.yticks(ticks_y, labels_y)  # Define os ticks e os rótulos do eixo Y
 
         plt.text(240, 28, '-51 °C = -60 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(250, 46, '-41 °C = -43 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(260, 74, '-32 °C = -25 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(270, 118, '-22 °C = -8 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(280, 180, '-12 °C = 9 °F', fontsize=8, ha='center', va='bottom', color='blue')
-        plt.text(290, 250, '-3 °C = 27 °F °C', fontsize=8, ha='center', va='bottom', color='blue')
-        plt.text(300, 370, '7 °C = 44 °F °C', fontsize=8, ha='center', va='bottom', color='blue')
+        plt.text(290, 250, '-3 °C = 27 °F', fontsize=8, ha='center', va='bottom', color='blue')
+        plt.text(300, 370, '7 °C = 44 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(310, 500, '16 °C = 62 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(320, 715, '26 °C = 79 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(330, 945, '36 °C = 97 °F', fontsize=8, ha='center', va='bottom', color='blue')
-        plt.text(340, 1200,'45 °C = 114 °F °C', fontsize=8, ha='center', va='bottom', color='blue')
-        plt.text(350, 1500,'55 °C = 131 °F °C', fontsize=8, ha='center', va='bottom', color='blue')
+        plt.text(340, 1200,'45 °C = 114 °F', fontsize=8, ha='center', va='bottom', color='blue')
+        plt.text(350, 1500,'55 °C = 131 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(360, 1885,'65 °C = 149 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(370, 2300,'75 °C = 167 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(380, 2850,'84 °C = 184 °F', fontsize=8, ha='center', va='bottom', color='blue')
@@ -163,11 +163,11 @@ def plotar_diagrama_mollier():
 
         plt.grid(True)
         plt.legend()
-        #plot.show()
+        plot.show()
 
         #plot.savefig(os.path.join('assets', 'imagem.png')) 
 
-        caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem2.png'
+        #caminho_imagem = r'/home/avionics/Desktop/RaspberryResfriacao/assets/images/imagem2.png'
 
         plot.savefig(caminho_imagem) 
         plt.close('all')  # Libera os recursos de plotagem

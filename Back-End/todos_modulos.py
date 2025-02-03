@@ -17,8 +17,8 @@ CONFIGURACOES = {
         "file_name": f"{CAMINHO_BASE}dados_pressao.txt",  # Caminho absoluto,
         "tipo": "Pressão",
             "formula": lambda valores: [ 
-                (((((valor / 3) - 500) / (4500 - 500)) * 100) ) if i in [0, 3, 7] else
-                (((((valor / 3) - 500) / (4500 - 500)) * 100) + 25.01) if i == 5 else
+                (((((valor / 3) - 500) / (4500 - 500)) * 100) ) if i in [0, 3, 5, 7] else
+                #(((((valor / 3) - 500) / (4500 - 500)) * 100) + 25.01) if i == 5 else
                 (((((valor / 3) - 500) / (4500 - 500)) * 500) )
                 for i, valor in enumerate(valores)
 ]
