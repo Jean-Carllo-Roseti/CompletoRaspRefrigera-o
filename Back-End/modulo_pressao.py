@@ -24,7 +24,7 @@ CONFIGURACOES = {
 
 
 # Porta serial compartilhada
-PORTA = '/dev/ttyUSB1'
+PORTA = '/dev/ttyUSB0'
 BAUDRATE = 9600
 TIMEOUT = 1  # Tempo de espera para resposta
 

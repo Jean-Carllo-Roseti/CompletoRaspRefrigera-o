@@ -40,10 +40,10 @@ def escrever_em_arquivo(valores):
 # Configuração do dispositivo e Modbus
 PORTA = '/dev/ttyUSB0'  # Porta serial
 BAUDRATE = 9600         # Taxa de comunicação
-UNIT_ID = 2             # Slave ID
+UNIT_ID = 3             # Slave ID
 ADDRESS = 32            # Endereço ajustado para base 0
 QUANTITY = 16           # Quantidade de registros
-FACTOR = 10             # Fator de escala
+
 
 
 
@@ -75,7 +75,8 @@ while True:
                 print("Erro na leitura dos registros.")
             else:
                 valores = leitura.registers  # Array de valores lidos
-                temp_valores = [valor / FACTOR for valor in valores]
+                temp_valores = [((0.0876 * valor - 5743.33) + 2.5) if (len(str(valor)) == 5 and valor != 64536) else ((valor / 10) - 0.15)
+        for valor in valores]
 
                 # Atualizando o array centralizador
                 limpar_array()  # Limpa os valores antigos
