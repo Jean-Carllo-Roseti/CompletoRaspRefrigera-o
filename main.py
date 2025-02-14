@@ -28,6 +28,7 @@ async def main():
     # Caminhos absolutos para os scripts
     scripts = [
         r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/todos_modulos.py",
+        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/mod_pressao2.py",
         r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoA.py",
         r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoB.py",
         r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoC.py"

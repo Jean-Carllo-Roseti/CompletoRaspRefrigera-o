@@ -39,6 +39,7 @@ int readDataInterval = 2000; // Intervalo para chamar a função (5 segundos, po
 float[] temperatures = new float[16]; // Array para armazenar temperaturas
 float[] temperatures2 = new float[16];
 float[] pressures = new float[8]; // Array para armazenar pressões
+float[] pressures2 = new float[8]; // Array para armazenar pressões
 
 String userInput1 = "";
 String userInput2 = "";
@@ -65,13 +66,13 @@ void setup() {
       new PVector(width * 0.085, height * 0.155),  // Air In BOX 1
       new PVector(width * 0.70, height * 0.12), // Condenser Fan 
       new PVector(width * 0.538, height * 0.12), // Condenser Assy
-      new PVector(width * 0.55, height * 0.365), // BOX 2 AIR IN
+      new PVector(width * 0.55, height * 0.365), // BOX 3 AIR IN
       new PVector(width * 0.405, height * 0.075), // P2, P3, P4, P6, P8: SB69-500V
       new PVector(width * 0.405, height * 0.096),  // P1, P7, P5, P9: SB69-100V
       new PVector(width * 0.054, height * 0.3745),  // Evaporator Box1
       new PVector(width * 0.756, height * 0.496),  // Evaporator Box3
       new PVector(width * 0.88, height * 0.39),  // Compressor Module
-      new PVector(width * 0.142, height * 0.455),  // Evaporator box2
+      new PVector(width * 0.125, height * 0.48),  // Evaporator box2
       new PVector(width * 0.55, height * 0.394),  // Air out Box3
       new PVector(width * 0.265, height * 0.28),  // In Ref Box 3 
       new PVector(width * 0.29, height * 0.175),  // Out Ref Box 1
@@ -79,8 +80,8 @@ void setup() {
       new PVector(width * 0.52, height * 0.5),  // In Ref Box 4
       
       new PVector(width * 0.7, height * 0.34),  // Out Refr BOX 3
-      new PVector(width * 0.345, height * 0.435),  // Air in BOX 2
-      new PVector(width * 0.345, height * 0.39),  // Air Out BOX 2
+      new PVector(width * 0.285, height * 0.435),  // Air in BOX 2 
+      new PVector(width * 0.285, height * 0.39),  // Air Out BOX 2
       
       new PVector(width * 0.64, height * 0.32),  // Temp In BOX 4
       new PVector(width * 0.64, height * 0.18),  // Temp Out BOX 4
@@ -127,18 +128,18 @@ void draw() {
     drawSensorCircleTemp("T1", temperatures[3], width * 0.147, height * 0.22);
     drawSensorCircleTemp("T4", temperatures[8], width * 0.064, height * 0.17);
     drawSensorCircleTemp("T3", temperatures[9], width * 0.064, height * 0.21);
-    //drawSensorCircleTemp("TEO", temperatures[10], width * 0.061, height * 0.34);
+    drawSensorCircleTemp("T5", temperatures[10], width * 0.24, height * 0.26); //ANTIGO TBOX1 E TEO BOX1
     drawSensorCircleTemp("T2", temperatures[2], width * 0.147, height * 0.32);
   
     // BOX2
-    drawSensorCircle("P5", pressures[4], width * 0.279, height * 0.485);
-    drawSensorCircle("P6", pressures[5], width * 0.277, height * 0.33);
+    drawSensorCircle("P5", pressures[4], width * 0.215, height * 0.485);
+    drawSensorCircle("P6", pressures[5], width * 0.215, height * 0.33);
     
-    //drawSensorCircleTemp("TEO", temperatures[11], width * 0.20, height * 0.52);
-    drawSensorCircleTemp("T9", temperatures[12], width * 0.325, height * 0.41);
-    drawSensorCircleTemp("T8", temperatures[13], width * 0.325, height * 0.45);
-    drawSensorCircleTemp("T7", temperatures[5], width * 0.279, height * 0.52);
-    drawSensorCircleTemp("T6", temperatures[4], width * 0.277, height * 0.375);
+    drawSensorCircleTemp("T10", temperatures[11], width * 0.3, height * 0.52); // ANTIGO TBOX2 E TEO BOX2
+    drawSensorCircleTemp("T9", temperatures[12], width * 0.272, height * 0.41);
+    drawSensorCircleTemp("T8", temperatures[13], width * 0.272, height * 0.45);
+    drawSensorCircleTemp("T7", temperatures[5], width * 0.215, height * 0.52);
+    drawSensorCircleTemp("T6", temperatures[4], width * 0.215, height * 0.375);
   
     // BOX3
     drawSensorCircle("P7", pressures[6], width * 0.66, height * 0.46);
@@ -147,11 +148,11 @@ void draw() {
     drawSensorCircleTemp("T12", temperatures[7], width * 0.66, height * 0.50);
     drawSensorCircleTemp("T11", temperatures[6], width * 0.66, height * 0.42); 
     drawSensorCircleTemp("T14", temperatures[14], width * 0.53, height * 0.41);
-    drawSensorCircleTemp("T13", temperatures[15], width * 0.53, height * 0.38);
-    //drawSensorCircleTemp("TEO", temperatures2[7], width * 0.62, height * 0.525);
+    drawSensorCircleTemp("T13", temperatures2[7], width * 0.53, height * 0.38);
+    drawSensorCircleTemp("T15", temperatures[15], width * 0.45, height * 0.525); // ANTIGO TBOX E TEO BOX3
   
     // BOX4
-    //drawSensorCircle("P9", pressures[0], width * 0.505, height * 0.267); //PRECISA DO NOVO MODULO pressure2
+    drawSensorCircle("P9", pressures2[0], width * 0.505, height * 0.267); //PRECISA DO NOVO MODULO pressure2 assa
     
     drawSensorCircleTemp("T16", temperatures2[0], width * 0.690, height * 0.267);
     drawSensorCircleTemp("T17", temperatures2[1], width * 0.625, height * 0.337);
@@ -170,7 +171,7 @@ void draw() {
     drawSensorCircleTemp("T20", temperatures2[6], width * 0.43, height * 0.17);
     
     drawTextInput(userInput1, width * 0.052, height * 0.39, "SN"); //BOX1
-    drawTextInput(userInput2, width * 0.14, height * 0.47, "SN"); //BOX2
+    drawTextInput(userInput2, width * 0.1, height * 0.49, "SN"); //BOX2
     drawTextInput(userInput3, width * 0.753, height * 0.511, "SN"); //BOX3
     drawTextInput(userInput4, width * 0.538, height * 0.132, "SN"); //BO4 CONDENSER ASSY
     drawTextInput(userInput5, width * 0.88, height * 0.4, "SN"); //COMPRESSOR
@@ -261,32 +262,32 @@ String getCurrentTime() {
 
 void drawSensorCircle(String label, float sensorValue, float x, float y) {
   fill(0); // Cor do círculo
-  ellipse(x, y, 20, 20); // Desenha o círculo
+  ellipse(x, y, 30, 30); // Desenha o círculo
 
   fill(255); // Cor do texto (branco)
-  textSize(12);
+  textSize(18);
   textAlign(CENTER, CENTER);
   text(label, x, y); // Desenha a letra maiúscula no centro do círculo
 
   // Desenha o valor ao lado do círculo
   fill(0); // Cor do texto (preto)
-  textSize(12);
+  textSize(18);
   textAlign(LEFT, CENTER);
   text(nf(sensorValue, 0, 2) + " PSI", x + 20, y); // Desenha o valor ao lado
 }
 
 void drawSensorCircleTemp(String label, float sensorValue, float x, float y) {
   fill(0); // Cor do círculo
-  ellipse(x, y, 20, 20); // Desenha o círculo
+  ellipse(x, y, 30, 30); // Desenha o círculo
 
   fill(255); // Cor do texto (branco)
-  textSize(12);
+  textSize(18);
   textAlign(CENTER, CENTER);
   text(label, x, y); // Desenha a letra maiúscula no centro do círculo
 
   // Desenha o valor ao lado do círculo
   fill(0); // Cor do texto (preto)
-  textSize(12);
+  textSize(18);
   textAlign(LEFT, CENTER);
   text(nf(sensorValue, 0, 2) + " °C", x + 20, y); // Desenha o valor ao lado
 }
@@ -315,8 +316,8 @@ void mousePressed() {
   float inputX1 = width * 0.052;     // Coordenada X do campo 1
   float inputY1 = height * 0.39;     // Coordenada Y do campo 1
 
-  float inputX2 = width * 0.14;      // Coordenada X do campo 2
-  float inputY2 = height * 0.47;     // Coordenada Y do campo 2
+  float inputX2 = width * 0.1;      // Coordenada X do campo 2
+  float inputY2 = height * 0.49;     // Coordenada Y do campo 2
 
   float inputX3 = width * 0.753;     // Coordenada X do campo 3
   float inputY3 = height * 0.511;    // Coordenada Y do campo 3
@@ -441,12 +442,14 @@ void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
 
 void readDataFromFile() {
   String filePathP = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_pressao.txt";
+  String filePathP2 = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_pressao2.txt";
   String filePathT = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_temperatura.txt";
   String filePathT2 = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_temperatura2.txt";
 
   try {
     // Cria BufferedReader para ambos os arquivos
     BufferedReader readerP = new BufferedReader(new FileReader(filePathP));
+    BufferedReader readerP2 = new BufferedReader(new FileReader(filePathP2));
     BufferedReader readerT = new BufferedReader(new FileReader(filePathT));
     BufferedReader readerT2 = new BufferedReader(new FileReader(filePathT2));
 
@@ -461,6 +464,18 @@ void readDataFromFile() {
           println("Pressão lida: " + pressures[i]); // Verifica o valor lido
         } catch (NumberFormatException e) {
           println("Erro ao converter a pressão na posição " + i + ": " + values[i]);
+        }
+      }
+    }
+
+    while ((line = readerP2.readLine()) != null) {
+      String[] values = line.split(","); // Divide a linha em valores
+      for (int l = 0; l < values.length && l < pressures2.length; l++) {
+        try {
+          pressures2[l] = Float.parseFloat(values[l].trim()); // Converte para float
+          println("Pressão lida: " + pressures2[l]); // Verifica o valor lido
+        } catch (NumberFormatException e) {
+          println("Erro ao converter a pressão na posição " + l + ": " + values[l]);
         }
       }
     }
@@ -492,6 +507,7 @@ void readDataFromFile() {
     }
     // Fecha os leitores
     readerP.close();
+    readerP2.close();
     readerT.close();
     readerT2.close();
     

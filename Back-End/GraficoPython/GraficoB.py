@@ -39,8 +39,9 @@ def atribuir_elementos_a_variaveis_pressao(array):
     """
     Atribui os elementos do array de pressão a variáveis separadas, convertendo de PSI para kPa.
     """
-    # Aplicar a conversão de PSI para kPa
-    array_convertido = [valor * 6.89476 for valor in array]
+    # Aplicar a conversão de PSI para kPa, o valor 13.7 vai ser acrescido devido a compesa de PSIA = 13.7
+    array_convertido = [(valor + 13.7) * 6.89476 for valor in array]
+
 
     if len(array) != 8:
         print(f"Atenção: O array de pressão contém {len(array)} elementos. Esperado: 8.")
@@ -78,7 +79,7 @@ def atribuir_elementos_a_variaveis_temperatura(array):
         #"temperatura_4": 284.85  # Kelvin 
         "temperatura_1": array_convertido[0], #entrada comp
         "temperatura_2": array_convertido[1], #saida comp 
-        "temperatura_3": array_convertido[5], #evap entrada 
+        "temperatura_3": array_convertido[11], #evap entrada 
         "temperatura_4": array_convertido[4]  #evap saida 
     }
     return variaveis_temperatura
@@ -152,13 +153,13 @@ def plotar_diagrama_mollier():
         plt.text(260, 74, '-32 °C = -25 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(270, 118, '-22 °C = -8 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(280, 180, '-12 °C = 9 °F', fontsize=8, ha='center', va='bottom', color='blue')
-        plt.text(290, 250, '-3 °C = 27 °F °C', fontsize=8, ha='center', va='bottom', color='blue')
-        plt.text(300, 370, '7 °C = 44 °F °C', fontsize=8, ha='center', va='bottom', color='blue')
+        plt.text(290, 250, '-3 °C = 27 °F', fontsize=8, ha='center', va='bottom', color='blue')
+        plt.text(300, 370, '7 °C = 44 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(310, 500, '16 °C = 62 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(320, 715, '26 °C = 79 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(330, 945, '36 °C = 97 °F', fontsize=8, ha='center', va='bottom', color='blue')
-        plt.text(340, 1200,'45 °C = 114 °F °C', fontsize=8, ha='center', va='bottom', color='blue')
-        plt.text(350, 1500,'55 °C = 131 °F °C', fontsize=8, ha='center', va='bottom', color='blue')
+        plt.text(340, 1200,'45 °C = 114 °F', fontsize=8, ha='center', va='bottom', color='blue')
+        plt.text(350, 1500,'55 °C = 131 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(360, 1885,'65 °C = 149 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(370, 2300,'75 °C = 167 °F', fontsize=8, ha='center', va='bottom', color='blue')
         plt.text(380, 2850,'84 °C = 184 °F', fontsize=8, ha='center', va='bottom', color='blue')

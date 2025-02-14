@@ -4,8 +4,6 @@ import signal
 import sys
 import threading
 
-
-
 CAMINHO_BASE = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/"
 
 # Configurações dos dispositivos e arquivos
@@ -15,38 +13,17 @@ CONFIGURACOES = {
         "address": 0,
         "count": 8,
         "factor": 10,  # Fator de escala da pressão
-        "file_name": f"{CAMINHO_BASE}dados_pressao.txt",  # Caminho absoluto,
+        "file_name": f"{CAMINHO_BASE}dados_pressao2.txt",  # Caminho absoluto,
         "tipo": "Pressão",
             "formula": lambda valores: [
-                (((((valor /3) - 500) / (4500 - 500)) * 100)  ) if i in [0, 3, 5, 7] else #adicionar 7
-                #(((((valor /3) - 500) / (4500 - 500)) * 100) + 7.81) if i == 5 else
-                (((((valor /3) - 500) / (4500 - 500)) * 500)  )
-                for i, valor in enumerate(valores)
+                ((((valor  - 500) / (4500 - 500)) * 500)  + 10) 
+                for  valor in valores
 ]
-    },
-    "temperatura": {
-        "unit_id": 2,
-        "address": 32,
-        "count": 16,
-        "file_name":  f"{CAMINHO_BASE}dados_temperatura.txt",
-        "tipo": "Temperatura",
-        "formula": lambda valores: [((0.0876 * valor - 5743.33) + 2.5 ) if (len(str(valor)) == 5 and valor != 64536) else ((valor /10 ) -0.15)
-        for valor in valores]
-
-    },
-    "temperatura2": {
-        "unit_id": 3,
-        "address": 32,
-        "count": 16,
-        "file_name":  f"{CAMINHO_BASE}dados_temperatura2.txt",
-        "tipo": "Temperatura",
-        "formula": lambda valores: [((0.0876 * valor - 5743.33) + 2.5 ) if (len(str(valor)) == 5 and valor != 64536) else ((valor /10 ) -0.15)
-        for valor in valores]
     }
 }
 
 # Porta serial compartilhada
-PORTA = '/dev/ttyUSB0'
+PORTA = '/dev/ttyUSB1'
 BAUDRATE = 9600
 TIMEOUT = 1  # Tempo de espera para resposta
 
