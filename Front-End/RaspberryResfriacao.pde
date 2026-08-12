@@ -14,20 +14,32 @@ String diretorio_atual = sketchPath();
 String mensagem = ""; // Variável para armazenar a mensagem de sucesso
 int mensagemTimeout = 0; // Tempo restante para exibir a mensagem
 
-PImage img1, img2, img3, img4;  // Variáveis para armazenar as imagens
+//PImage img1, img2, img3, img4;  // Variáveis para armazenar as imagens
+PImage img1, img2, img4;
 long lastUpdateTime = 0; // Tempo da última atualização
 int updateInterval = 2100;  // Intervalo para atualizar as imagens (1 segundo)
 
+// Variáveis para responsividade
+float scaleFactorX = 1.0; // Fator de escala horizontal
+float scaleFactorY = 1.0; // Fator de escala vertical
+float baseWidth = 1920.0;  // Resolução base (largura)
+float baseHeight = 1080.0; // Resolução base (altura)
+int lastWidth = 0;  // Última largura registrada
+int lastHeight = 0; // Última altura registrada
 
-String[] palavras = {"Air Out", "Air In", "Condenser Fan", "Condenser Assy", "Air In", "P2, P3, P4, P6, P8: SB69-500V", "P1, P7, P5, P9: SB69-100V",
-"Evaporator Module", "Evaporator Module", "Compressor Module", "Evaporator Module","Air Out", "In Refr", "Out Refr", "In Refr", "Out Refr", "Air In",
-"Air Out", "Temp In", "Temp Out", "Air In", "In", "Out", "Freon Out", "Freon In", "Suction - Gasous Freon", "Pressure - Gaseous Freon", " Pressure - Liquid Freon "};
+
+String[] palavras = {"In", "Out", "Module Assy", "Compressor Drive", "REAR CABIN", "P2, P3, P4: SB69-500V", "P1: SB69-100V",
+"Evaporator Module", "TAIL", "CONDERNSER ASSY", "Evaporator Module"," Out", "RECEIVER DRYER", "CONDENSER FAN", "MOTOR COMPARTMENT", "Out", "In",
+"Out", "In", "Temp Out", "FRONT CABIN", "In", "Out", "Freon Out", "Freon In", "Suction - Gasous Freon", "Pressure - Gaseous Freon", " Pressure - Liquid Freon "};
 PVector[] posicoes;
 
-String caminhoImagem1 = "/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem.png";
-String caminhoImagem2 = "/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem2.png";
-String caminhoImagem3 = "/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem3.png";
-String caminhoImagem4 = "/home/avionics/Refri/CompletoRaspRefrigera/assets/images/FotoMalha.png";
+//String caminhoImagem1 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem.png";
+//String caminhoImagem2 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem2.png";
+//String caminhoImagem4 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/FotoMalha.png";
+
+String caminhoImagem1 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/imagem.png";
+String caminhoImagem2 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/imagem2.png";
+String caminhoImagem4 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/FotoMalha.png";
 
 long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios PARA DADOS MOCADOS, TEST.
 int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (2 segundos)
@@ -35,11 +47,8 @@ int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (
 long lastReadDataTime = 0; // Tempo da última execução da função readDataFromFile PARA DADOS REAIS
 int readDataInterval = 2000; // Intervalo para chamar a função (5 segundos, por exemplo)
 
-
 float[] temperatures = new float[16]; // Array para armazenar temperaturas
-float[] temperatures2 = new float[16];
 float[] pressures = new float[8]; // Array para armazenar pressões
-float[] pressures2 = new float[8]; // Array para armazenar pressões
 
 String userInput1 = "";
 String userInput2 = "";
@@ -51,59 +60,30 @@ int currentInput = 0; // Para rastrear qual input está ativo
 
 void setup() {
   fullScreen();  // Define o tamanho da tela para tela cheia
-
+  
   // Carregar as imagens inicialmente
   img1 = loadImage(caminhoImagem1);
   img2 = loadImage(caminhoImagem2);
-  img3 = loadImage(caminhoImagem3);
   img4 = loadImage(caminhoImagem4);
 
+  // Calcula os fatores de escala iniciais
+  updateScaleFactors();
+  
+  // Inicializa o array de posições de forma responsiva
+  initializePosicoes();
+  
   lastUpdateTime = millis(); // Armazena o tempo inicial de execução
   readDataFromFile();
-  
-  posicoes = new PVector[]{
-      new PVector(width * 0.085, height * 0.19),  // Air Out BOX 1
-      new PVector(width * 0.085, height * 0.155),  // Air In BOX 1
-      new PVector(width * 0.70, height * 0.12), // Condenser Fan 
-      new PVector(width * 0.538, height * 0.12), // Condenser Assy
-      new PVector(width * 0.55, height * 0.365), // BOX 3 AIR IN
-      new PVector(width * 0.405, height * 0.075), // P2, P3, P4, P6, P8: SB69-500V
-      new PVector(width * 0.405, height * 0.096),  // P1, P7, P5, P9: SB69-100V
-      new PVector(width * 0.054, height * 0.3745),  // Evaporator Box1
-      new PVector(width * 0.756, height * 0.496),  // Evaporator Box3
-      new PVector(width * 0.88, height * 0.39),  // Compressor Module
-      new PVector(width * 0.125, height * 0.48),  // Evaporator box2
-      new PVector(width * 0.55, height * 0.394),  // Air out Box3
-      new PVector(width * 0.265, height * 0.28),  // In Ref Box 3 
-      new PVector(width * 0.29, height * 0.175),  // Out Ref Box 1
-      
-      new PVector(width * 0.52, height * 0.5),  // In Ref Box 4
-      
-      new PVector(width * 0.7, height * 0.34),  // Out Refr BOX 3
-      new PVector(width * 0.285, height * 0.435),  // Air in BOX 2 
-      new PVector(width * 0.285, height * 0.39),  // Air Out BOX 2
-      
-      new PVector(width * 0.64, height * 0.32),  // Temp In BOX 4
-      new PVector(width * 0.64, height * 0.18),  // Temp Out BOX 4
-      new PVector(width * 0.71, height * 0.25),  // Air In BOX 4
-      
-      new PVector(width * 0.48, height * 0.185),  // In Linha Azul
-      new PVector(width * 0.405, height * 0.185),  // OUt Linha Azul
-      
-      new PVector(width * 0.79, height * 0.26),  // Freon out Compressor 
-      new PVector(width * 0.79, height * 0.3445),  // Frenon In Comrpessor
-      
-      new PVector(width * 0.13, height * 0.045),  // Suction - verde
-      new PVector(width * 0.13, height * 0.075),  //  Roxo
-      new PVector(width * 0.13, height * 0.1),  //  AZUL
-      
-      new PVector(width * 0.9, height * 0.51),  // Data
-      new PVector(width * 0.9, height * 0.525)  // Hora
-  };
 }
 
 void draw() {
   background(255);  // Limpa a tela com fundo branco
+  
+  // Verifica se a resolução mudou e recalcula os scale factors
+  if (width != lastWidth || height != lastHeight) {
+    updateScaleFactors();
+    initializePosicoes(); // Recalcula as posições com a nova resolução
+  }
 
   // Verifica se passou o tempo do intervalo para atualizar as imagens
   if (millis() - lastUpdateTime > updateInterval) {
@@ -112,77 +92,52 @@ void draw() {
     // Atualiza as imagens caso o arquivo tenha sido modificado
     img1 = loadImage(caminhoImagem1); 
     img2 = loadImage(caminhoImagem2);
-    img3 = loadImage(caminhoImagem3);
   }
+
+  // Desenha as imagens centralizadas
+  float img1Width = width * 0.4;
+  float img1Height = height * 0.45;
+  float img1X = width * 0.05;
+  float img1Y = height * 0.55;
+  
+  float img2Width = width * 0.4;
+  float img2Height = height * 0.45;
+  float img2X = width * 0.5;
+  float img2Y = height * 0.55;
+    
+  float img4Width = width * 0.97;
+  float img4Height = height * 0.52;
+  float img4X = width * 0.03;
+  float img4Y = height * 0.03;
 
   // Desenha as imagens
-  image(img1, width * 0.01, height * 0.55, width * 0.33, height * 0.38);  // Imagem 1
-  image(img2, width * 0.35, height * 0.55, width * 0.33, height * 0.38); // Imagem 2
-  image(img3, width * 0.67, height * 0.55, width * 0.33, height * 0.38); // Imagem 3
-  image(img4, width * 0.03, height * 0.03, width * 0.97, height * 0.52);  // Imagem 4 (não atualiza automaticamente, permanece fixa)
+  if (img1 != null) image(img1, img1X, img1Y, img1Width, img1Height);
+  if (img2 != null) image(img2, img2X, img2Y, img2Width, img2Height);
+  if (img4 != null) image(img4, img4X, img4Y, img4Width, img4Height);
    
       //BOX1
-    drawSensorCircle("P4", pressures[3], width * 0.147, height * 0.17);
-    drawSensorCircle("P3", pressures[2], width * 0.147, height * 0.267);
+    drawSensorCircleTemp("T1",temperatures[0], width * 0.85, height * 0.315); 
+    drawSensorCircleTemp("T2", temperatures[1], width * 0.88, height * 0.049);
+    drawSensorCircleTemp("T3", temperatures[2], width * 0.78, height * 0.27);
+    drawSensorCircleTemp("T4", temperatures[3], width * 0.625, height * 0.183); 
+    drawSensorCircleTemp("T5", temperatures[4], width * 0.455, height * 0.15);
+    drawSensorCircleTemp("T6", temperatures[5], width * 0.3, height * 0.15);
+    drawSensorCircleTemp("T7", temperatures[6], width * 0.3, height * 0.08);
+    drawSensorCircleTemp("T8", temperatures[7], width * 0.21, height * 0.045); 
+    drawSensorCircleTemp("T9", temperatures[8], width * 0.1, height * 0.07);
+    drawSensorCircleTemp("T10", temperatures[9], width * 0.070, height * 0.255);
+    drawSensorCircleTemp("T11", temperatures[10], width * 0.1, height * 0.3);
+    drawSensorCircleTemp("T12", temperatures[11], width * 0.2, height * 0.28);
+    drawSensorCircleTemp("T13", temperatures[12], width * 0.3, height * 0.31);
+    drawSensorCircleTemp("T14", temperatures[13], width * 0.3, height * 0.38); 
+    drawSensorCircleTemp("T15", temperatures[14], width * 0.070, height * 0.467); 
+    drawSensorCircleTemp("T16", temperatures[15], width * 0.625, height * 0.315);
     
-    drawSensorCircleTemp("T1", temperatures[3], width * 0.147, height * 0.22);
-    drawSensorCircleTemp("T4", temperatures[8], width * 0.064, height * 0.17);
-    drawSensorCircleTemp("T3", temperatures[9], width * 0.064, height * 0.21);
-    drawSensorCircleTemp("T5", temperatures[10], width * 0.24, height * 0.26); //ANTIGO TBOX1 E TEO BOX1
-    drawSensorCircleTemp("T2", temperatures[2], width * 0.147, height * 0.32);
-  
-    // BOX2
-    drawSensorCircle("P5", pressures[4], width * 0.215, height * 0.485);
-    drawSensorCircle("P6", pressures[5], width * 0.215, height * 0.33);
-    
-    drawSensorCircleTemp("T10", temperatures[11], width * 0.3, height * 0.52); // ANTIGO TBOX2 E TEO BOX2
-    drawSensorCircleTemp("T9", temperatures[12], width * 0.272, height * 0.41);
-    drawSensorCircleTemp("T8", temperatures[13], width * 0.272, height * 0.45);
-    drawSensorCircleTemp("T7", temperatures[5], width * 0.215, height * 0.52);
-    drawSensorCircleTemp("T6", temperatures[4], width * 0.215, height * 0.375);
-  
-    // BOX3
-    drawSensorCircle("P7", pressures[6], width * 0.66, height * 0.46);
-    drawSensorCircle("P8", pressures[7], width * 0.66, height * 0.38);
-    
-    drawSensorCircleTemp("T12", temperatures[7], width * 0.66, height * 0.50);
-    drawSensorCircleTemp("T11", temperatures[6], width * 0.66, height * 0.42); 
-    drawSensorCircleTemp("T14", temperatures[14], width * 0.53, height * 0.41);
-    drawSensorCircleTemp("T13", temperatures2[7], width * 0.53, height * 0.38);
-    drawSensorCircleTemp("T15", temperatures[15], width * 0.45, height * 0.525); // ANTIGO TBOX E TEO BOX3
-  
-    // BOX4
-    drawSensorCircle("P9", pressures2[0], width * 0.505, height * 0.267); //PRECISA DO NOVO MODULO pressure2 assa
-    
-    drawSensorCircleTemp("T16", temperatures2[0], width * 0.690, height * 0.267);
-    drawSensorCircleTemp("T17", temperatures2[1], width * 0.625, height * 0.337);
-    drawSensorCircleTemp("T18", temperatures2[2], width * 0.625, height * 0.195);
-    drawSensorCircleTemp("TF19", temperatures2[3], width * 0.76, height * 0.18); //FAN  
-    drawSensorCircleTemp("T24", temperatures2[8], width * 0.505, height * 0.315);
-
     // LINHAS E EQUIPAMENTOS
-    drawSensorCircle("P2", pressures[1], width * 0.78, height * 0.24); // SAIDA COMPRESSOR
-    drawSensorCircleTemp("T23", temperatures[1], width * 0.78, height * 0.29); //SAIDA MOTOR
-    
-    drawSensorCircle("P1", pressures[0], width * 0.78, height * 0.32); //MOTOR Entrada 
-    drawSensorCircleTemp("T21",temperatures[0], width * 0.78, height * 0.373); //MOTOR entrada
-    //drawSensorCircleTemp("TC", temperatures2[4], width * 0.90, height * 0.355); //TEMP COMPRESSOR
-    //drawSensorCircleTemp("TM", temperatures2[5], width * 0.92, height * 0.19); // TEMP MOTOR
-    drawSensorCircleTemp("T20", temperatures2[6], width * 0.43, height * 0.17);
-    
-    drawTextInput(userInput1, width * 0.052, height * 0.39, "SN"); //BOX1
-    drawTextInput(userInput2, width * 0.1, height * 0.49, "SN"); //BOX2
-    drawTextInput(userInput3, width * 0.753, height * 0.511, "SN"); //BOX3
-    drawTextInput(userInput4, width * 0.538, height * 0.132, "SN"); //BO4 CONDENSER ASSY
-    drawTextInput(userInput5, width * 0.88, height * 0.4, "SN"); //COMPRESSOR
-    drawTextInput(userInput6, width * 0.7, height * 0.132, "SN"); //FAN
-    
-  /*
-   if (millis() - lastMockUpdateTime > mockUpdateInterval) {
-    generateMockData();
-    lastMockUpdateTime = millis(); // Atualiza o tempo de última atualização
-  }
-  */
+    drawSensorCircle("P1", pressures[0],  width * 0.85, height * 0.373); //MOTOR Entrada 
+    drawSensorCircle("P2", pressures[1], width * 0.625, height * 0.24); // SAIDA COMPRESSOR
+    drawSensorCircle("P3", pressures[2], width * 0.3, height * 0.205);  
+    drawSensorCircle("P4", pressures[3], width * 0.625, height * 0.368); 
   
   if (millis() - lastReadDataTime > readDataInterval) {
     readDataFromFile(); // Chama a função para ler os dados do arquivo
@@ -198,7 +153,6 @@ void draw() {
     popStyle(); // Restaura o estilo anterior
     mensagemTimeout--;
 }
-  
   drawPalavras();
   drawSaveButton();
   
@@ -215,6 +169,59 @@ void drawTextInput(String inputText, float x, float y, String label) {
   textSize(10);
   textAlign(LEFT, CENTER);
   text(label + ": " + inputText, x + 5, y + inputHeight / 2); // Texto de entrada, centralizado verticalmente
+}
+
+// Função para atualizar os fatores de escala quando a resolução muda
+void updateScaleFactors() {
+  scaleFactorX = width / baseWidth;
+  scaleFactorY = height / baseHeight;
+  lastWidth = width;
+  lastHeight = height;
+}
+
+// Função para inicializar as posições de forma responsiva
+void initializePosicoes() {
+  posicoes = new PVector[]{
+      new PVector(width * 0.25, height * 0.159),  //  In  BOX 1
+      new PVector(width * 0.22, height * 0.097),  //  Out BOX 1
+      
+      new PVector(width * 0.66, height * 0.52), // Module ASSY
+      new PVector(width * 0.65, height * 0.5), //  Compressor Drive
+      
+      new PVector(width * 0.235, height * 0.47), // REAR CABIN
+      new PVector(width * 0.3, height * 0.52), // P2, P3, P4: SB69-500V
+      new PVector(width * 0.3, height * 0.54),  // P1: SB69-100V
+      new PVector(width * 0.123, height * 0.22),  // Evaporator Box1
+      new PVector(width * 0.44, height * 0.06),  // TAIL Box3
+      new PVector(width * 0.77, height * 0.085),  // Compressor Module
+      new PVector(width * 0.125, height * 0.45),  // Evaporator box2
+      new PVector(width * 0.724, height * 0.225),  // Air out Box3
+      new PVector(width * 0.495, height * 0.29),  // RECEIVER DRYER
+      new PVector(width * 0.642, height * 0.085),  // Out Ref Box 1
+      
+      new PVector(width * 0.44, height * 0.52),  // MOTOR COMPARTMENT
+      
+      new PVector(width * 0.79, height * 0.326),  // Out Refr BOX 3
+      new PVector(width * 0.7, height * 0.326),  //  in  
+      new PVector(width * 0.218, height * 0.325),  // Air Out BOX 2 
+      
+      new PVector(width * 0.255, height * 0.39),  // Temp In BOX 4
+      new PVector(width * 1.64, height * 0.18),  // Temp Out BOX 4
+      new PVector(width * 0.23, height * 0.255),  // FRONT CABIN
+      
+      new PVector(width * 0.58, height * 0.19),  // In Linha Azul
+      new PVector(width * 0.48, height * 0.19),  // OUt Linha Azul
+      
+      new PVector(width * 1.79, height * 0.26),  // Freon out Compressor >>>
+      new PVector(width * 1.79, height * 0.3445),  // Frenon In Comrpessor>>>
+      
+      new PVector( width * 0.1405, height * 0.508),  // Suction - verde
+      new PVector( width * 0.1405, height * 0.524),  //  Roxo
+      new PVector( width * 0.138, height * 0.542),  //  AZUL
+      
+      new PVector(width * 0.882, height * 0.51),  // Data
+      new PVector(width * 0.883, height * 0.525)  // Hora
+  };
 }
 
 
@@ -309,90 +316,14 @@ void mousePressed() {
   float saveWidth = width * 0.05;     // Largura do botão
   float saveHeight = height * 0.025;  // Altura do botão
   
-  // Coordenadas e tamanhos dos campos de entrada
-  float inputWidth = width * 0.1;    // Largura do campo de texto
-  float inputHeight = height * 0.02; // Altura do campo de texto
-
-  float inputX1 = width * 0.052;     // Coordenada X do campo 1
-  float inputY1 = height * 0.39;     // Coordenada Y do campo 1
-
-  float inputX2 = width * 0.1;      // Coordenada X do campo 2
-  float inputY2 = height * 0.49;     // Coordenada Y do campo 2
-
-  float inputX3 = width * 0.753;     // Coordenada X do campo 3
-  float inputY3 = height * 0.511;    // Coordenada Y do campo 3
-
-  float inputX4 = width * 0.538;     // Coordenada X do campo 4
-  float inputY4 = height * 0.132;    // Coordenada Y do campo 4
-
-  float inputX5 = width * 0.88;      // Coordenada X do campo 5
-  float inputY5 = height * 0.4;      // Coordenada Y do campo 5
-
-  float inputX6 = width * 0.7;       // Coordenada X do campo 6
-  float inputY6 = height * 0.132;    // Coordenada Y do campo 6
 
   // Verifica se o clique foi dentro do botão "Save"
   if (mouseX > saveX && mouseX < saveX + saveWidth &&
       mouseY > saveY && mouseY < saveY + saveHeight) {
     saveWithTimestamp(); // Chama a função de salvar
   }
-
-  // Detecta qual campo de entrada foi clicado
-  if (mouseX > inputX1 && mouseX < inputX1 + inputWidth &&
-      mouseY > inputY1 && mouseY < inputY1 + inputHeight) {
-    currentInput = 0; // Campo userInput1
-  } else if (mouseX > inputX2 && mouseX < inputX2 + inputWidth &&
-             mouseY > inputY2 && mouseY < inputY2 + inputHeight) {
-    currentInput = 1; // Campo userInput2
-  } else if (mouseX > inputX3 && mouseX < inputX3 + inputWidth &&
-             mouseY > inputY3 && mouseY < inputY3 + inputHeight) {
-    currentInput = 2; // Campo userInput3
-  } else if (mouseX > inputX4 && mouseX < inputX4 + inputWidth &&
-             mouseY > inputY4 && mouseY < inputY4 + inputHeight) {
-    currentInput = 3; // Campo userInput4
-  } else if (mouseX > inputX5 && mouseX < inputX5 + inputWidth &&
-             mouseY > inputY5 && mouseY < inputY5 + inputHeight) {
-    currentInput = 4; // Campo userInput5
-  } else if (mouseX > inputX6 && mouseX < inputX6 + inputWidth &&
-             mouseY > inputY6 && mouseY < inputY6 + inputHeight) {
-    currentInput = 5; // Campo userInput6
-  }
 }
 
-void keyPressed() {
-  // Remoção de caracteres com BACKSPACE
-  if (key == BACKSPACE) {
-    if (currentInput == 0 && userInput1.length() > 0) {
-      userInput1 = userInput1.substring(0, userInput1.length() - 1);
-    } else if (currentInput == 1 && userInput2.length() > 0) {
-      userInput2 = userInput2.substring(0, userInput2.length() - 1);
-    } else if (currentInput == 2 && userInput3.length() > 0) {
-      userInput3 = userInput3.substring(0, userInput3.length() - 1);
-    } else if (currentInput == 3 && userInput4.length() > 0) {
-      userInput4 = userInput4.substring(0, userInput4.length() - 1);
-    } else if (currentInput == 4 && userInput5.length() > 0) {
-      userInput5 = userInput5.substring(0, userInput5.length() - 1);
-    } else if (currentInput == 5 && userInput6.length() > 0) {
-      userInput6 = userInput6.substring(0, userInput6.length() - 1);
-    } 
-  }
-  // Adiciona caracteres quando não é BACKSPACE, ENTER ou TAB
-  else if (key != ENTER && key != TAB) {
-    if (currentInput == 0 && userInput1.length() < 15) {
-      userInput1 += key;
-    } else if (currentInput == 1 && userInput2.length() < 15) {
-      userInput2 += key;
-    } else if (currentInput == 2 && userInput3.length() < 15) {
-      userInput3 += key;
-    } else if (currentInput == 3 && userInput4.length() < 15) {
-      userInput4 += key;
-    } else if (currentInput == 4 && userInput3.length() < 15) {
-      userInput5 += key;
-    } else if (currentInput == 5 && userInput4.length() < 15) {
-      userInput6 += key;
-    }
-  }
-}
 
 //bom, alterar apenas para tirar a foto da malha
 void saveWithTimestamp() {
@@ -404,7 +335,6 @@ void saveWithTimestamp() {
   // Salvando cada imagem com sua legenda
   salvarImagemComLegenda(img1, userInput1, folderPath + "/imagem1.png");
   salvarImagemComLegenda(img2, userInput2, folderPath + "/imagem2.png");
-  salvarImagemComLegenda(img3, userInput3, folderPath + "/imagem3.png");
   save(folderPath + "/Malha.png");
 
   println("Imagens salvas com legendas em: " + folderPath);
@@ -442,16 +372,13 @@ void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
 
 void readDataFromFile() {
   String filePathP = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_pressao.txt";
-  String filePathP2 = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_pressao2.txt";
   String filePathT = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_temperatura.txt";
-  String filePathT2 = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_temperatura2.txt";
+
 
   try {
     // Cria BufferedReader para ambos os arquivos
     BufferedReader readerP = new BufferedReader(new FileReader(filePathP));
-    BufferedReader readerP2 = new BufferedReader(new FileReader(filePathP2));
     BufferedReader readerT = new BufferedReader(new FileReader(filePathT));
-    BufferedReader readerT2 = new BufferedReader(new FileReader(filePathT2));
 
     String line;
 
@@ -468,18 +395,6 @@ void readDataFromFile() {
       }
     }
 
-    while ((line = readerP2.readLine()) != null) {
-      String[] values = line.split(","); // Divide a linha em valores
-      for (int l = 0; l < values.length && l < pressures2.length; l++) {
-        try {
-          pressures2[l] = Float.parseFloat(values[l].trim()); // Converte para float
-          println("Pressão lida: " + pressures2[l]); // Verifica o valor lido
-        } catch (NumberFormatException e) {
-          println("Erro ao converter a pressão na posição " + l + ": " + values[l]);
-        }
-      }
-    }
-
     // Lê todas as linhas de temperatura
     while ((line = readerT.readLine()) != null) {
       String[] values = line.split(","); // Divide a linha em valores
@@ -492,24 +407,9 @@ void readDataFromFile() {
         }
       }
     }
-    
-        // Lê todas as linhas de temperatura
-    while ((line = readerT2.readLine()) != null) {
-      String[] values = line.split(","); // Divide a linha em valores
-      for (int k = 0; k < values.length && k < temperatures2.length; k++) {
-        try {
-          temperatures2[k] = Float.parseFloat(values[k].trim()); // Converte para float
-          println("Temperatura lida: " + temperatures2[k]); // Verifica o valor lido
-        } catch (NumberFormatException e) {
-          println("Erro ao converter a temperatura na posição " + k + ": " + values[k]);
-        }
-      }
-    }
-    // Fecha os leitores
+
     readerP.close();
-    readerP2.close();
     readerT.close();
-    readerT2.close();
     
   } catch (IOException e) {
     println("Erro ao ler o arquivo: " + e.getMessage());

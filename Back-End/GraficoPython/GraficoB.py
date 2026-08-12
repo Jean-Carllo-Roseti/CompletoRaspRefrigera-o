@@ -49,14 +49,23 @@ def atribuir_elementos_a_variaveis_pressao(array):
 
     # Atribuir valores a variáveis
     variaveis_pressao = {
-        "pressao_1": array_convertido[0], #comp entrada
-        "pressao_2": array_convertido[1], #comp saida
-        "pressao_3": array_convertido[4], #evap entrada
-        "pressao_4": array_convertido[5], #evap saida
-        #"pressao_1": 229.87,
-        #"pressao_2": 2025.79,
-        #"pressao_3": 1997.55,
-        #"pressao_4": 254.03
+
+        "pressao_1": array_convertido[15], #entrada comp 
+        "pressao_2": array_convertido[0], #saida comp
+        "pressao_3": array_convertido[13], #entrada evap
+        "pressao_4": array_convertido[12], #saida evap
+        
+        # sistema antigo 
+        # "pressao_1": array_convertido[0], #entrada comp 
+        # "pressao_2": array_convertido[1], #saida comp
+        # "pressao_3": array_convertido[2], #entrada evap
+        # "pressao_4": array_convertido[3], #saida evap
+        
+        # dado mockado
+        #"pressao_1": 229.87, #229.87       entrada comp
+        #"pressao_2": 2025.79, #2025.79     saida comp
+        #"pressao_3": 1997.55, #1997.55     entrda evap
+        #"pressao_4": 254.03 #254.03        saida evap  
     }
 
     return variaveis_pressao
@@ -170,13 +179,10 @@ def plotar_diagrama_mollier():
         #plot.show()
 
         caminho_imagem = r'/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem2.png'
+        # caminho_imagem = r'/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem2.png'
         plot.savefig(caminho_imagem) 
 
         plt.close('all')  # Libera os recursos de plotagem
         
 if __name__ == "__main__":
     plotar_diagrama_mollier()
-
-
-    
-    
