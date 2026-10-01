@@ -1,13 +1,19 @@
 import java.text.SimpleDateFormat; // Para formatação de data
 import java.util.Date; // Para obter a data atual
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.File;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.ss.util.CellRangeAddress;
+
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 String diretorio_atual = sketchPath();
@@ -50,6 +56,8 @@ int readDataInterval = 2000; // Intervalo para chamar a função (5 segundos, po
 float[] temperatures = new float[16]; // Array para armazenar temperaturas
 float[] pressures = new float[8]; // Array para armazenar pressões
 
+JanelaTabela janelaTabela = null;
+
 String userInput1 = "";
 String userInput2 = "";
 String userInput3 = "";
@@ -74,6 +82,7 @@ void setup() {
   
   lastUpdateTime = millis(); // Armazena o tempo inicial de execução
   readDataFromFile();
+  abrirJanelaTabela();
 }
 
 void draw() {
@@ -158,6 +167,939 @@ void draw() {
   
 }
 
+class JanelaTabela extends PApplet {
+
+  // ==========================================================
+  // ARQUIVO
+  // ==========================================================
+
+  String caminhoSAeSR;
+
+
+  // ==========================================================
+  // DADOS
+  // ==========================================================
+
+  double superaquecimento_1 = 0;
+  double superaquecimento_2 = 0;
+  double subresfriamento = 0;
+
+  double temperatura_succao_1 = 0;
+  double temperatura_sat_baixa = 0;
+
+  double temperatura_succao_2 = 0;
+  double temperatura_sat_baixa_2 = 0;
+
+  double temperatura_sat_alta = 0;
+  double temperatura_liquido = 0;
+
+  double pressao_succao = 0;
+  double pressao_alta = 0;
+
+  String cenario_1 = "";
+  String cenario_2 = "";
+
+
+  // ==========================================================
+  // ATUALIZAÇÃO
+  // ==========================================================
+
+  long ultimaAtualizacao = 0;
+
+  int intervaloAtualizacao = 1000;
+
+
+  // ==========================================================
+  // DIMENSÕES
+  // ==========================================================
+
+  int larguraJanela = 1000;
+  int alturaJanela = 300;
+
+
+  // ==========================================================
+  // CORES
+  // ==========================================================
+
+  color AZUL_ESCURO =
+    color(23, 54, 93);
+
+  color AZUL_CLARO =
+    color(91, 155, 213);
+
+  color AZUL_MUITO_CLARO =
+    color(217, 234, 247);
+
+  color BRANCO =
+    color(255);
+
+  color PRETO =
+    color(0);
+
+
+  // ==========================================================
+  // SETTINGS
+  // ==========================================================
+
+  void settings() {
+
+    size(
+      larguraJanela,
+      alturaJanela
+    );
+  }
+
+
+  // ==========================================================
+  // SETUP
+  // ==========================================================
+
+  void setup() {
+
+    surface.setTitle(
+      "Tabela - Refrigeração"
+    );
+
+    surface.setResizable(false);
+
+    surface.setLocation(
+      50,
+      50
+    );
+
+    textFont(
+      new PFont(
+        new java.awt.Font("Arial", java.awt.Font.BOLD, 20),
+        true
+      )
+    );
+
+    caminhoSAeSR = RaspberryResfriacao.this.sketchPath("../SAeSR.txt");
+
+    carregarDados();
+
+    ultimaAtualizacao = millis();
+  }
+
+
+  // ==========================================================
+  // DRAW
+  // ==========================================================
+
+  void draw() {
+
+    background(255);
+
+
+    // Atualiza os dados a cada 1 segundo
+
+    if (
+      millis() - ultimaAtualizacao
+      >= intervaloAtualizacao
+    ) {
+
+      ultimaAtualizacao =
+        millis();
+
+      carregarDados();
+    }
+
+
+    desenharTabela();
+  }
+
+
+  // ==========================================================
+  // LER SAeSR.txt
+  // ==========================================================
+
+  void carregarDados() {
+
+    String[] dados =
+      loadStrings(caminhoSAeSR);
+
+
+    // Arquivo ainda não disponível
+    if (
+      dados == null ||
+      dados.length < 13
+    ) {
+
+      return;
+    }
+
+
+    try {
+
+      // ------------------------------------------------------
+      // VALORES
+      // ------------------------------------------------------
+
+      superaquecimento_1 =
+        Double.parseDouble(
+          dados[0].trim()
+        );
+
+      superaquecimento_2 =
+        Double.parseDouble(
+          dados[1].trim()
+        );
+
+      subresfriamento =
+        Double.parseDouble(
+          dados[2].trim()
+        );
+
+
+      temperatura_succao_1 =
+        Double.parseDouble(
+          dados[3].trim()
+        );
+
+      temperatura_sat_baixa =
+        Double.parseDouble(
+          dados[4].trim()
+        );
+
+
+      temperatura_succao_2 =
+        Double.parseDouble(
+          dados[5].trim()
+        );
+
+      temperatura_sat_baixa_2 =
+        Double.parseDouble(
+          dados[6].trim()
+        );
+
+
+      temperatura_sat_alta =
+        Double.parseDouble(
+          dados[7].trim()
+        );
+
+      temperatura_liquido =
+        Double.parseDouble(
+          dados[8].trim()
+        );
+
+
+      pressao_succao =
+        Double.parseDouble(
+          dados[9].trim()
+        );
+
+      pressao_alta =
+        Double.parseDouble(
+          dados[10].trim()
+        );
+
+
+      // ------------------------------------------------------
+      // CENÁRIOS
+      // ------------------------------------------------------
+
+      cenario_1 =
+        dados[11].trim();
+
+      cenario_2 =
+        dados[12].trim();
+
+
+    } catch (Exception e) {
+
+      println(
+        "Erro ao atualizar tabela: "
+        + e.getMessage()
+      );
+    }
+  }
+
+
+  // ==========================================================
+  // DESENHAR TABELA
+  // ==========================================================
+
+  void desenharTabela() {
+
+    float margem = 25;
+
+    float larguraTotal =
+      width - (margem * 2);
+
+    float espaco = 12;
+
+    float larguraTabela =
+      (larguraTotal - (espaco * 2)) / 3.0;
+
+    float x1 = margem;
+
+    float x2 =
+      x1 + larguraTabela + espaco;
+
+    float x3 =
+      x2 + larguraTabela + espaco;
+
+
+    float yTitulo = 10;
+
+    float alturaTitulo = 34;
+
+    float yTabela =
+      yTitulo + alturaTitulo;
+
+
+    // ========================================================
+    // TÍTULO
+    // ========================================================
+
+    fill(AZUL_ESCURO);
+
+    stroke(PRETO);
+
+    rect(
+      margem,
+      yTitulo,
+      larguraTotal,
+      alturaTitulo
+    );
+
+
+    fill(BRANCO);
+
+    textAlign(
+      CENTER,
+      CENTER
+    );
+
+    textSize(24);
+
+    text(
+      "Ficha de Cálculo de Super Aquecimento / Super Resfriamento",
+      margem + larguraTotal / 2,
+      yTitulo + alturaTitulo / 2
+    );
+
+
+    // ========================================================
+    // TABELAS
+    // ========================================================
+
+    desenharEvaporador(
+      x1,
+      yTabela,
+      larguraTabela,
+      "Evaporador 1",
+      "T7",
+      temperatura_succao_1,
+      "P4",
+      pressao_succao,
+      temperatura_sat_baixa,
+      superaquecimento_1,
+      "CN",
+      cenario_1
+    );
+
+
+    desenharEvaporador(
+      x2,
+      yTabela,
+      larguraTabela,
+      "Evaporador 2",
+      "T13",
+      temperatura_succao_2,
+      "P4",
+      pressao_succao,
+      temperatura_sat_baixa_2,
+      superaquecimento_2,
+      "CN",
+      cenario_2
+    );
+
+
+    desenharCondensador(
+      x3,
+      yTabela,
+      larguraTabela
+    );
+  }
+
+
+  // ==========================================================
+  // EVAPORADOR
+  // ==========================================================
+
+  void desenharEvaporador(
+    float x,
+    float y,
+    float largura,
+    String titulo,
+    String nomeT,
+    double valorT,
+    String nomeP,
+    double valorP,
+    double tempSat,
+    double SA,
+    String nomeCN,
+    String cenario
+  ) {
+
+    float larguraColuna1 =
+      largura * 0.30;
+
+    float larguraColuna2 =
+      largura - larguraColuna1;
+
+
+    float alturaCabecalho = 30;
+
+    float alturaLinha = 30;
+    float alturaLinhaCenario = 80;
+
+
+    // --------------------------------------------------------
+    // CABEÇALHO
+    // --------------------------------------------------------
+
+    fill(AZUL_ESCURO);
+
+    stroke(PRETO);
+
+    rect(
+      x,
+      y,
+      largura,
+      alturaCabecalho
+    );
+
+
+    fill(BRANCO);
+
+    textSize(20);
+
+    textAlign(
+      CENTER,
+      CENTER
+    );
+
+    text(
+      titulo,
+      x + largura / 2,
+      y + alturaCabecalho / 2
+    );
+
+
+    // --------------------------------------------------------
+    // T7 / T13
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho,
+      larguraColuna1,
+      alturaLinha,
+      nomeT
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho,
+      larguraColuna2,
+      alturaLinha,
+      nf((float)valorT, 0, 2) + " °C"
+    );
+
+
+    // --------------------------------------------------------
+    // P4
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho + alturaLinha,
+      larguraColuna1,
+      alturaLinha,
+      nomeP
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho + alturaLinha,
+      larguraColuna2,
+      alturaLinha,
+      nf((float)valorP, 0, 2) + " PSI"
+    );
+
+
+    // --------------------------------------------------------
+    // TEMPSAT
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho + alturaLinha * 2,
+      larguraColuna1,
+      alturaLinha,
+      "TempSat"
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho + alturaLinha * 2,
+      larguraColuna2,
+      alturaLinha,
+      nf((float)tempSat, 0, 2) + " °C"
+    );
+
+
+    // --------------------------------------------------------
+    // SA
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho + alturaLinha * 3,
+      larguraColuna1,
+      alturaLinha,
+      "SA"
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho + alturaLinha * 3,
+      larguraColuna2,
+      alturaLinha,
+      nf((float)SA, 0, 2) + " °C"
+    );
+
+
+    // --------------------------------------------------------
+    // CN
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho + alturaLinha * 4,
+      larguraColuna1,
+      alturaLinhaCenario,
+      nomeCN
+    );
+
+    desenharCelulaCenario(
+      x + larguraColuna1,
+      y + alturaCabecalho + alturaLinha * 4,
+      larguraColuna2,
+      alturaLinhaCenario,
+      cenario
+    );
+  }
+
+
+  // ==========================================================
+  // CONDENSADOR
+  // SEM CN
+  // ==========================================================
+
+  void desenharCondensador(
+    float x,
+    float y,
+    float largura
+  ) {
+
+    float larguraColuna1 =
+      largura * 0.30;
+
+    float larguraColuna2 =
+      largura - larguraColuna1;
+
+
+    float alturaCabecalho = 30;
+
+    float alturaLinha = 30;
+    float alturaLinhaCenario = 80;
+
+
+    // --------------------------------------------------------
+    // CABEÇALHO
+    // --------------------------------------------------------
+
+    fill(AZUL_ESCURO);
+
+    stroke(PRETO);
+
+    rect(
+      x,
+      y,
+      largura,
+      alturaCabecalho
+    );
+
+
+    fill(BRANCO);
+
+    textSize(20);
+
+    textAlign(
+      CENTER,
+      CENTER
+    );
+
+    text(
+      "Condensador",
+      x + largura / 2,
+      y + alturaCabecalho / 2
+    );
+
+
+    // --------------------------------------------------------
+    // T4
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho,
+      larguraColuna1,
+      alturaLinha,
+      "T4"
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho,
+      larguraColuna2,
+      alturaLinha,
+      nf((float)temperatura_liquido, 0, 2) + " °C"
+    );
+
+
+    // --------------------------------------------------------
+    // P2
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho + alturaLinha,
+      larguraColuna1,
+      alturaLinha,
+      "P2"
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho + alturaLinha,
+      larguraColuna2,
+      alturaLinha,
+      nf((float)pressao_alta, 0, 2) + " PSI"
+    );
+
+
+    // --------------------------------------------------------
+    // TEMPSAT
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho + alturaLinha * 2,
+      larguraColuna1,
+      alturaLinha,
+      "TempSat"
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho + alturaLinha * 2,
+      larguraColuna2,
+      alturaLinha,
+      nf((float)temperatura_sat_alta, 0, 2) + " °C"
+    );
+
+
+    // --------------------------------------------------------
+    // SR
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho + alturaLinha * 3,
+      larguraColuna1,
+      alturaLinha,
+      "SR"
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho + alturaLinha * 3,
+      larguraColuna2,
+      alturaLinha,
+      nf((float)subresfriamento, 0, 2) + " °C"
+    );
+
+
+    // --------------------------------------------------------
+    // LINHA 7 VAZIA
+    // --------------------------------------------------------
+
+    desenharCelulaIdentificacao(
+      x,
+      y + alturaCabecalho + alturaLinha * 4,
+      larguraColuna1,
+      alturaLinhaCenario,
+      ""
+    );
+
+    desenharCelulaValor(
+      x + larguraColuna1,
+      y + alturaCabecalho + alturaLinha * 4,
+      larguraColuna2,
+      alturaLinhaCenario,
+      ""
+    );
+  }
+
+
+  // ==========================================================
+  // CÉLULA DE IDENTIFICAÇÃO
+  // ==========================================================
+
+  void desenharCelulaIdentificacao(
+    float x,
+    float y,
+    float largura,
+    float altura,
+    String texto
+  ) {
+
+    fill(AZUL_MUITO_CLARO);
+
+    stroke(PRETO);
+
+    rect(
+      x,
+      y,
+      largura,
+      altura
+    );
+
+
+    fill(PRETO);
+
+    textSize(20);
+
+    textAlign(
+      CENTER,
+      CENTER
+    );
+
+    text(
+      texto,
+      x + largura / 2,
+      y + altura / 2
+    );
+  }
+
+
+  // ==========================================================
+  // CÉLULA DE VALOR
+  // ==========================================================
+
+  void desenharCelulaValor(
+    float x,
+    float y,
+    float largura,
+    float altura,
+    String texto
+  ) {
+
+    fill(AZUL_CLARO);
+
+    stroke(PRETO);
+
+    rect(
+      x,
+      y,
+      largura,
+      altura
+    );
+
+
+    fill(PRETO);
+
+    textSize(20);
+
+    textAlign(
+      CENTER,
+      CENTER
+    );
+
+    text(
+      texto,
+      x + largura / 2,
+      y + altura / 2
+    );
+  }
+
+
+  // ==========================================================
+  // CÉLULA DO CENÁRIO
+  // ==========================================================
+
+  void desenharCelulaCenario(
+    float x,
+    float y,
+    float largura,
+    float altura,
+    String texto
+  ) {
+
+    fill(AZUL_CLARO);
+
+    stroke(PRETO);
+
+    rect(
+      x,
+      y,
+      largura,
+      altura
+    );
+
+
+    fill(PRETO);
+
+    textSize(20);
+
+    textAlign(
+      CENTER,
+      CENTER
+    );
+
+
+    // Quebra o cenário em várias linhas
+    String[] linhas =
+      dividirTexto(texto, largura - 12);
+
+
+    float alturaTexto =
+      textAscent() + textDescent();
+
+
+    float alturaTotal =
+      linhas.length * alturaTexto;
+
+
+    float inicioY =
+      y + (altura - alturaTotal) / 2
+      + alturaTexto / 2;
+
+
+    for (int i = 0; i < linhas.length; i++) {
+
+      text(
+        linhas[i],
+        x + largura / 2,
+        inicioY + i * alturaTexto
+      );
+    }
+  }
+
+
+  // ==========================================================
+  // QUEBRAR TEXTO
+  // ==========================================================
+
+  String[] dividirTexto(
+    String texto,
+    float larguraMaxima
+  ) {
+
+    if (
+      texto == null ||
+      texto.length() == 0
+    ) {
+
+      return new String[]{""};
+    }
+
+
+    String[] palavras =
+      split(texto, ' ');
+
+
+    String atual = "";
+
+    ArrayList<String> linhas =
+      new ArrayList<String>();
+
+
+    for (String palavra : palavras) {
+
+      String teste =
+        atual.length() == 0
+        ? palavra
+        : atual + " " + palavra;
+
+
+      if (
+        atual.length() > 0 &&
+        textWidth(teste) > larguraMaxima
+      ) {
+
+        if (atual.length() > 0) {
+
+          linhas.add(atual);
+        }
+
+        atual = palavra;
+
+      } else {
+
+        atual = teste;
+      }
+    }
+
+
+    if (atual.length() > 0) {
+
+      linhas.add(atual);
+    }
+
+
+    return linhas.toArray(
+      new String[linhas.size()]
+    );
+  }
+
+
+  // ==========================================================
+  // FECHAMENTO DA JANELA
+  // ==========================================================
+
+  public void dispose() {
+
+    janelaTabela = null;
+
+    super.dispose();
+  }
+}
+
+void abrirJanelaTabela() {
+
+  // Evita abrir várias janelas iguais
+  if (janelaTabela != null) {
+    return;
+  }
+
+  janelaTabela = new JanelaTabela();
+
+  String[] argumentos = {
+    "JanelaTabela"
+  };
+
+  PApplet.runSketch(
+    argumentos,
+    janelaTabela
+  );
+}
+
 void drawTextInput(String inputText, float x, float y, String label) {
   float inputWidth = width * 0.1;  // Largura do campo de texto (exemplo proporcional)
   float inputHeight = height * 0.02; // Altura do campo de texto (exemplo proporcional)
@@ -170,6 +1112,841 @@ void drawTextInput(String inputText, float x, float y, String label) {
   textAlign(LEFT, CENTER);
   text(label + ": " + inputText, x + 5, y + inputHeight / 2); // Texto de entrada, centralizado verticalmente
 }
+
+
+
+void gerarExcel(String folderPath) {
+
+  // ==========================================================
+  // CAMINHO DO SAeSR.txt
+  // ==========================================================
+
+  String caminhoSAeSR = sketchPath("../SAeSR.txt");
+
+  // ==========================================================
+  // LER O SAeSR.txt
+  // ==========================================================
+
+  String[] dados = loadStrings(caminhoSAeSR);
+
+  if (dados == null || dados.length < 13) {
+
+    println(
+      "Erro: SAeSR.txt não possui os 13 valores esperados."
+    );
+
+    return;
+  }
+
+  // ==========================================================
+  // DADOS DO ARQUIVO
+  //
+  // 0  = superaquecimento_1
+  // 1  = superaquecimento_2
+  // 2  = subresfriamento
+  // 3  = temperatura_succao_1
+  // 4  = temperatura_sat_baixa
+  // 5  = temperatura_succao_2
+  // 6  = temperatura_sat_baixa
+  // 7  = temperatura_sat_alta
+  // 8  = temperatura_liquido
+  // 9  = pressao_succao
+  // 10 = pressao_alta
+  // 11 = cenario_1
+  // 12 = cenario_2
+  // ==========================================================
+
+  double superaquecimento_1 =
+    Double.parseDouble(dados[0].trim());
+
+  double superaquecimento_2 =
+    Double.parseDouble(dados[1].trim());
+
+  double subresfriamento =
+    Double.parseDouble(dados[2].trim());
+
+  double temperatura_succao_1 =
+    Double.parseDouble(dados[3].trim());
+
+  double temperatura_sat_baixa =
+    Double.parseDouble(dados[4].trim());
+
+  double temperatura_succao_2 =
+    Double.parseDouble(dados[5].trim());
+
+  double temperatura_sat_baixa_2 =
+    Double.parseDouble(dados[6].trim());
+
+  double temperatura_sat_alta =
+    Double.parseDouble(dados[7].trim());
+
+  double temperatura_liquido =
+    Double.parseDouble(dados[8].trim());
+
+  double pressao_succao =
+    Double.parseDouble(dados[9].trim());
+
+  double pressao_alta =
+    Double.parseDouble(dados[10].trim());
+
+  String cenario_1 =
+    dados[11].trim();
+
+  String cenario_2 =
+    dados[12].trim();
+
+
+  // ==========================================================
+  // CRIAR WORKBOOK
+  // ==========================================================
+
+  Workbook workbook =
+    new XSSFWorkbook();
+
+  org.apache.poi.ss.usermodel.Sheet sheet =
+    workbook.createSheet("Refrigeração");
+
+
+  // ==========================================================
+  // CORES
+  // ==========================================================
+
+  // Azul mais escuro
+  String AZUL_ESCURO = "17365D";
+
+  // Azul intermediário
+  String AZUL_CLARO = "5B9BD5";
+
+  // Azul mais claro de todos
+  String AZUL_MUITO_CLARO = "D9EAF7";
+
+
+  // ==========================================================
+  // FONTES
+  // ==========================================================
+
+  Font fonteBranca =
+    workbook.createFont();
+
+  fonteBranca.setFontName("Arial");
+  fonteBranca.setFontHeightInPoints((short)10);
+  fonteBranca.setBold(true);
+  fonteBranca.setColor(
+    IndexedColors.WHITE.getIndex()
+  );
+
+
+  Font fonteTitulo =
+    workbook.createFont();
+
+  fonteTitulo.setFontName("Arial");
+  fonteTitulo.setFontHeightInPoints((short)14);
+  fonteTitulo.setBold(true);
+  fonteTitulo.setColor(
+    IndexedColors.WHITE.getIndex()
+  );
+
+
+  Font fontePreta =
+    workbook.createFont();
+
+  fontePreta.setFontName("Arial");
+  fontePreta.setFontHeightInPoints((short)10);
+  fontePreta.setColor(
+    IndexedColors.BLACK.getIndex()
+  );
+
+
+  // ==========================================================
+  // ESTILO BASE COM BORDA
+  // ==========================================================
+
+  CellStyle estiloTitulo =
+    workbook.createCellStyle();
+
+  estiloTitulo.setFont(fonteTitulo);
+
+  estiloTitulo.setFillForegroundColor(
+    criarCorHex(AZUL_ESCURO)
+  );
+
+  estiloTitulo.setFillPattern(
+    FillPatternType.SOLID_FOREGROUND
+  );
+
+  estiloTitulo.setAlignment(
+    HorizontalAlignment.CENTER
+  );
+
+  estiloTitulo.setVerticalAlignment(
+    VerticalAlignment.CENTER
+  );
+
+  aplicarBorda(estiloTitulo);
+
+
+  // ==========================================================
+  // CABEÇALHOS DAS TABELAS
+  // ==========================================================
+
+  CellStyle estiloCabecalho =
+    workbook.createCellStyle();
+
+  estiloCabecalho.setFont(fonteBranca);
+
+  estiloCabecalho.setFillForegroundColor(
+    criarCorHex(AZUL_ESCURO)
+  );
+
+  estiloCabecalho.setFillPattern(
+    FillPatternType.SOLID_FOREGROUND
+  );
+
+  estiloCabecalho.setAlignment(
+    HorizontalAlignment.CENTER
+  );
+
+  estiloCabecalho.setVerticalAlignment(
+    VerticalAlignment.CENTER
+  );
+
+  aplicarBorda(estiloCabecalho);
+
+
+  // ==========================================================
+  // COLUNAS A / C / E
+  // AZUL MAIS CLARO DE TODOS
+  // TEXTO PRETO
+  // ==========================================================
+
+  CellStyle estiloIdentificacao =
+    workbook.createCellStyle();
+
+  estiloIdentificacao.setFont(fontePreta);
+
+  estiloIdentificacao.setFillForegroundColor(
+    criarCorHex(AZUL_MUITO_CLARO)
+  );
+
+  estiloIdentificacao.setFillPattern(
+    FillPatternType.SOLID_FOREGROUND
+  );
+
+  estiloIdentificacao.setAlignment(
+    HorizontalAlignment.CENTER
+  );
+
+  estiloIdentificacao.setVerticalAlignment(
+    VerticalAlignment.CENTER
+  );
+
+  aplicarBorda(estiloIdentificacao);
+
+
+  // ==========================================================
+  // COLUNAS B / D / F
+  // AZUL CLARO
+  // TEXTO PRETO
+  // ==========================================================
+
+  CellStyle estiloValor =
+    workbook.createCellStyle();
+
+  estiloValor.setFont(fontePreta);
+
+  estiloValor.setFillForegroundColor(
+    criarCorHex(AZUL_CLARO)
+  );
+
+  estiloValor.setFillPattern(
+    FillPatternType.SOLID_FOREGROUND
+  );
+
+  estiloValor.setAlignment(
+    HorizontalAlignment.CENTER
+  );
+
+  estiloValor.setVerticalAlignment(
+    VerticalAlignment.CENTER
+  );
+
+  estiloValor.setDataFormat(
+    workbook.createDataFormat().getFormat("0.00")
+  );
+
+  aplicarBorda(estiloValor);
+
+
+  // ==========================================================
+  // CÉLULA DOS CENÁRIOS
+  // ==========================================================
+
+  CellStyle estiloCenario =
+    workbook.createCellStyle();
+
+  estiloCenario.setFont(fontePreta);
+
+  estiloCenario.setFillForegroundColor(
+    criarCorHex(AZUL_CLARO)
+  );
+
+  estiloCenario.setFillPattern(
+    FillPatternType.SOLID_FOREGROUND
+  );
+
+  estiloCenario.setAlignment(
+    HorizontalAlignment.LEFT
+  );
+
+  estiloCenario.setVerticalAlignment(
+    VerticalAlignment.CENTER
+  );
+
+  estiloCenario.setWrapText(true);
+
+  aplicarBorda(estiloCenario);
+
+
+  // ==========================================================
+  // LINHA 1
+  // A1:F1
+  // ==========================================================
+
+  Row linha1 =
+    sheet.createRow(0);
+
+  for (int i = 0; i < 6; i++) {
+
+    Cell celula =
+      linha1.createCell(i);
+
+    celula.setCellStyle(estiloTitulo);
+  }
+
+  linha1.getCell(0).setCellValue(
+    "Ficha de Cálculo de Super Aquecimento / Super Resfriamento"
+  );
+
+  sheet.addMergedRegion(
+    new CellRangeAddress(
+      0,
+      0,
+      0,
+      5
+    )
+  );
+
+  linha1.setHeightInPoints(
+    cmParaPontos(0.9)
+  );
+
+
+  // ==========================================================
+  // CABEÇALHO EVAPORADOR 1
+  // A2:B2
+  // ==========================================================
+
+  criarCabecalhoTabela(
+    sheet,
+    1,
+    0,
+    1,
+    "Evaporador 1",
+    estiloCabecalho
+  );
+
+
+  // ==========================================================
+  // CABEÇALHO EVAPORADOR 2
+  // C2:D2
+  // ==========================================================
+
+  criarCabecalhoTabela(
+    sheet,
+    1,
+    2,
+    3,
+    "Evaporador 2",
+    estiloCabecalho
+  );
+
+
+  // ==========================================================
+  // CABEÇALHO CONDENSADOR
+  // E2:F2
+  // ==========================================================
+
+  criarCabecalhoTabela(
+    sheet,
+    1,
+    4,
+    5,
+    "Condensador",
+    estiloCabecalho
+  );
+
+
+  // ==========================================================
+  // EVAPORADOR 1
+  // ==========================================================
+
+  criarLinhaTabela(
+    sheet,
+    2,
+    0,
+    "T7",
+    temperatura_succao_1,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    3,
+    0,
+    "P4",
+    pressao_succao,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    4,
+    0,
+    "TempSat",
+    temperatura_sat_baixa,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    5,
+    0,
+    "SA",
+    superaquecimento_1,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+
+  // ==========================================================
+  // CN EVAPORADOR 1
+  // A7:B7
+  // ==========================================================
+
+  Row linha7 =
+    sheet.createRow(6);
+
+  Cell celulaA7 =
+    linha7.createCell(0);
+
+  celulaA7.setCellValue("CN");
+  celulaA7.setCellStyle(estiloIdentificacao);
+
+
+  Cell celulaB7 =
+    linha7.createCell(1);
+
+  celulaB7.setCellValue(cenario_1);
+  celulaB7.setCellStyle(estiloCenario);
+
+
+  // ==========================================================
+  // EVAPORADOR 2
+  // ==========================================================
+
+  criarLinhaTabela(
+    sheet,
+    2,
+    2,
+    "T13",
+    temperatura_succao_2,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    3,
+    2,
+    "P4",
+    pressao_succao,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    4,
+    2,
+    "TempSat",
+    temperatura_sat_baixa_2,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    5,
+    2,
+    "SA",
+    superaquecimento_2,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+
+  // ==========================================================
+  // CN EVAPORADOR 2
+  // C7:D7
+  // ==========================================================
+
+  Cell celulaC7 =
+    linha7.createCell(2);
+
+  celulaC7.setCellValue("CN");
+  celulaC7.setCellStyle(estiloIdentificacao);
+
+
+  Cell celulaD7 =
+    linha7.createCell(3);
+
+  celulaD7.setCellValue(cenario_2);
+  celulaD7.setCellStyle(estiloCenario);
+
+
+  // ==========================================================
+  // CONDENSADOR
+  // E:F
+  //
+  // SEM CN
+  // ==========================================================
+
+  criarLinhaTabela(
+    sheet,
+    2,
+    4,
+    "T4",
+    temperatura_liquido,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    3,
+    4,
+    "P2",
+    pressao_alta,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    4,
+    4,
+    "TempSat",
+    temperatura_sat_alta,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+  criarLinhaTabela(
+    sheet,
+    5,
+    4,
+    "SR",
+    subresfriamento,
+    estiloIdentificacao,
+    estiloValor
+  );
+
+
+  // ==========================================================
+  // ALTURA DAS LINHAS
+  // ==========================================================
+
+  for (int i = 2; i <= 5; i++) {
+
+    Row linha =
+      sheet.getRow(i);
+
+    if (linha != null) {
+
+      linha.setHeightInPoints(
+        cmParaPontos(0.5)
+      );
+    }
+  }
+
+
+  // Linha 7 = 1 cm
+
+  linha7.setHeightInPoints(
+    cmParaPontos(1.0)
+  );
+
+
+  // ==========================================================
+  // LARGURA DAS COLUNAS
+  // ==========================================================
+
+  // A = 1,65 cm
+  // B = 4,45 cm
+  // C = 1,65 cm
+  // D = 4,45 cm
+  // E = 1,65 cm
+  // F = 4,45 cm
+
+  sheet.setColumnWidth(
+    0,
+    larguraColunaExcel(1.65)
+  );
+
+  sheet.setColumnWidth(
+    1,
+    larguraColunaExcel(4.45)
+  );
+
+  sheet.setColumnWidth(
+    2,
+    larguraColunaExcel(1.65)
+  );
+
+  sheet.setColumnWidth(
+    3,
+    larguraColunaExcel(4.45)
+  );
+
+  sheet.setColumnWidth(
+    4,
+    larguraColunaExcel(1.65)
+  );
+
+  sheet.setColumnWidth(
+    5,
+    larguraColunaExcel(4.45)
+  );
+
+
+  // ==========================================================
+  // SALVAR NA MESMA PASTA DO REGISTRO
+  // ==========================================================
+
+  String caminhoExcel =
+    folderPath + "/RelatorioRefrigeracao.xlsx";
+
+
+  try {
+
+    FileOutputStream arquivo =
+      new FileOutputStream(caminhoExcel);
+
+    workbook.write(arquivo);
+
+    arquivo.close();
+    workbook.close();
+
+    println(
+      "Excel salvo em: " + caminhoExcel
+    );
+
+  } catch (IOException e) {
+
+    println(
+      "Erro ao salvar Excel: " + e.getMessage()
+    );
+  }
+}
+
+
+// ==========================================================
+// CRIAR LINHA DA TABELA
+// ==========================================================
+
+void criarLinhaTabela(
+  org.apache.poi.ss.usermodel.Sheet sheet,
+  int linha,
+  int colunaInicial,
+  String nome,
+  double valor,
+  CellStyle estiloNome,
+  CellStyle estiloValor
+) {
+
+  // Obtém a linha existente
+  Row row = sheet.getRow(linha);
+
+  // Caso a linha ainda não exista, cria
+  if (row == null) {
+    row = sheet.createRow(linha);
+  }
+
+
+  // ========================================================
+  // COLUNA DE IDENTIFICAÇÃO
+  // A / C / E
+  // ========================================================
+
+  Cell celulaNome =
+    row.createCell(colunaInicial);
+
+  celulaNome.setCellValue(nome);
+  celulaNome.setCellStyle(estiloNome);
+
+
+  // ========================================================
+  // COLUNA DO VALOR
+  // B / D / F
+  // ========================================================
+
+  Cell celulaValor =
+    row.createCell(colunaInicial + 1);
+
+  celulaValor.setCellValue(valor);
+  celulaValor.setCellStyle(estiloValor);
+}
+
+
+// ==========================================================
+// CRIAR CABEÇALHO
+// ==========================================================
+
+void criarCabecalhoTabela(
+  org.apache.poi.ss.usermodel.Sheet sheet,
+  int linha,
+  int colunaInicial,
+  int colunaFinal,
+  String texto,
+  CellStyle estilo
+) {
+
+  Row row =
+    sheet.getRow(linha);
+
+  if (row == null) {
+
+    row =
+      sheet.createRow(linha);
+  }
+
+
+  for (
+    int coluna = colunaInicial;
+    coluna <= colunaFinal;
+    coluna++
+  ) {
+
+    Cell celula =
+      row.createCell(coluna);
+
+    celula.setCellStyle(estilo);
+  }
+
+
+  row.getCell(
+    colunaInicial
+  ).setCellValue(texto);
+
+
+  sheet.addMergedRegion(
+    new CellRangeAddress(
+      linha,
+      linha,
+      colunaInicial,
+      colunaFinal
+    )
+  );
+
+
+  row.setHeightInPoints(
+    cmParaPontos(0.6)
+  );
+}
+
+
+
+// ==========================================================
+// BORDA
+// ==========================================================
+
+void aplicarBorda(CellStyle estilo) {
+
+  estilo.setBorderTop(
+    BorderStyle.THIN
+  );
+
+  estilo.setBorderBottom(
+    BorderStyle.THIN
+  );
+
+  estilo.setBorderLeft(
+    BorderStyle.THIN
+  );
+
+  estilo.setBorderRight(
+    BorderStyle.THIN
+  );
+
+  estilo.setTopBorderColor(
+    IndexedColors.BLACK.getIndex()
+  );
+
+  estilo.setBottomBorderColor(
+    IndexedColors.BLACK.getIndex()
+  );
+
+  estilo.setLeftBorderColor(
+    IndexedColors.BLACK.getIndex()
+  );
+
+  estilo.setRightBorderColor(
+    IndexedColors.BLACK.getIndex()
+  );
+}
+
+
+
+// ==========================================================
+// COR HEXADECIMAL
+// ==========================================================
+
+XSSFColor criarCorHex(String hex) {
+
+  return new XSSFColor(
+    java.awt.Color.decode("#" + hex),
+    null
+  );
+}
+
+
+
+// ==========================================================
+// CENTÍMETROS → PONTOS
+// ==========================================================
+
+float cmParaPontos(float cm) {
+
+  return cm * 28.3464567;
+}
+
+
+
+// ==========================================================
+// CENTÍMETROS → LARGURA EXCEL
+// ==========================================================
+
+int larguraColunaExcel(float cm) {
+
+  return round(
+    cm * 5.6 * 256
+  );
+}
+
+
 
 // Função para atualizar os fatores de escala quando a resolução muda
 void updateScaleFactors() {
@@ -327,19 +2104,70 @@ void mousePressed() {
 
 //bom, alterar apenas para tirar a foto da malha
 void saveWithTimestamp() {
+
   // Gera o timestamp para criar uma pasta única
-  String timestamp = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss").format(new Date());
-  String folderPath = "/home/avionics/Refri/CompletoRaspRefrigera/ScrenShots/Registros/" + timestamp;
-  new File(folderPath).mkdir(); // Cria a pasta com o timestamp
+  String timestamp =
+    new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss").format(new Date());
 
-  // Salvando cada imagem com sua legenda
-  salvarImagemComLegenda(img1, userInput1, folderPath + "/imagem1.png");
-  salvarImagemComLegenda(img2, userInput2, folderPath + "/imagem2.png");
-  save(folderPath + "/Malha.png");
+  Path pastaTeste = Paths.get(
+    System.getProperty("user.home"),
+    "Desktop",
+    "Teste_Save_" + timestamp
+  );
 
-  println("Imagens salvas com legendas em: " + folderPath);
-  mensagem = "Imagens geradas com sucesso.";
-  mensagemTimeout = 50; // Número de frames que a mensagem será exibida (ajuste conforme necessário)
+  try {
+    Files.createDirectories(pastaTeste);
+  } catch (IOException e) {
+    println("Erro ao criar pasta de teste: " + e.getMessage());
+    mensagem = "Erro ao criar a pasta de teste.";
+    mensagemTimeout = 100;
+    return;
+  }
+
+  String folderPath = pastaTeste.toString();
+
+  // ----------------------------------------------------------
+  // Salvando imagens
+  // ----------------------------------------------------------
+
+  salvarImagemComLegenda(
+    img1,
+    userInput1,
+    Paths.get(folderPath, "imagem1.png").toString()
+  );
+
+  salvarImagemComLegenda(
+    img2,
+    userInput2,
+    Paths.get(folderPath, "imagem2.png").toString()
+  );
+
+  save(Paths.get(folderPath, "Malha.png").toString());
+
+  if (janelaTabela != null) {
+    janelaTabela.saveFrame(
+      Paths.get(folderPath, "Tabela.png").toString()
+    );
+  }
+
+
+  // ----------------------------------------------------------
+  // Gerar Excel
+  // ----------------------------------------------------------
+
+  gerarExcel(folderPath);
+
+  // ----------------------------------------------------------
+  // Mensagem
+  // ----------------------------------------------------------
+
+  println(
+    "Imagens e Excel salvos em: " + folderPath
+  );
+
+  mensagem = "Imagens e Excel gerados com sucesso.";
+
+  mensagemTimeout = 50;
 }
 
 void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
