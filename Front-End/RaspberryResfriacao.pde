@@ -47,8 +47,8 @@ String caminhoImagem1 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images
 String caminhoImagem2 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/imagem2.png";
 String caminhoImagem4 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/FotoMalha.png";
 
-long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios PARA DADOS MOCADOS, TEST.
-int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (2 segundos)
+//long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios PARA DADOS MOCADOS, TEST.
+//int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (2 segundos)
 
 long lastReadDataTime = 0; // Tempo da última execução da função readDataFromFile PARA DADOS REAIS
 int readDataInterval = 2000; // Intervalo para chamar a função (5 segundos, por exemplo)
@@ -174,7 +174,6 @@ class JanelaTabela extends PApplet {
   // ==========================================================
 
   String caminhoSAeSR;
-
 
   // ==========================================================
   // DADOS
@@ -1000,7 +999,6 @@ class JanelaTabela extends PApplet {
       );
     }
   }
-
 
   // ==========================================================
   // QUEBRAR TEXTO
