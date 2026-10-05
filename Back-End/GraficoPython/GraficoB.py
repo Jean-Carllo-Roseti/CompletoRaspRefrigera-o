@@ -178,8 +178,8 @@ def plotar_diagrama_mollier():
         plt.legend()
         #plot.show()
 
-        caminho_imagem = r'/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem2.png'
-        # caminho_imagem = r'/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem2.png'
+        # caminho_imagem = r'/home/avionics/Refri/CompletoRaspRefrigera/assets/images/imagem2.png'
+        caminho_imagem = r'/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem2.png'
         plot.savefig(caminho_imagem) 
 
         plt.close('all')  # Libera os recursos de plotagem

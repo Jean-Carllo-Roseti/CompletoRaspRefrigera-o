@@ -4,8 +4,8 @@ import signal
 import sys
 import threading
 
-CAMINHO_BASE = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/"
-# CAMINHO_BASE = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/"
+# CAMINHO_BASE = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/"
+CAMINHO_BASE = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/"
 
 # Configurações dos dispositivos e arquivos
 CONFIGURACOES = {

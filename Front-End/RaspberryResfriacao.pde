@@ -39,13 +39,13 @@ String[] palavras = {"In", "Out", "Module Assy", "Compressor Drive", "REAR CABIN
 "Out", "In", "Temp Out", "FRONT CABIN", "In", "Out", "Freon Out", "Freon In", "Suction - Gasous Freon", "Pressure - Gaseous Freon", " Pressure - Liquid Freon "};
 PVector[] posicoes;
 
-//String caminhoImagem1 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem.png";
-//String caminhoImagem2 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem2.png";
-//String caminhoImagem4 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/FotoMalha.png";
+String caminhoImagem1 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem.png";
+String caminhoImagem2 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/imagem2.png";
+String caminhoImagem4 = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/assets/images/FotoMalha.png";
 
-String caminhoImagem1 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/imagem.png";
-String caminhoImagem2 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/imagem2.png";
-String caminhoImagem4 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/FotoMalha.png";
+//String caminhoImagem1 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/imagem.png";
+//String caminhoImagem2 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/imagem2.png";
+//String caminhoImagem4 = "C:/Users/Avionics/CompletoRaspRefrigera-o/assets/images/FotoMalha.png";
 
 //long lastMockUpdateTime = 0; // Tempo da última atualização dos dados fictícios PARA DADOS MOCADOS, TEST.
 //int mockUpdateInterval = 2000; // Intervalo para atualizar os dados fictícios (2 segundos)
@@ -2197,8 +2197,11 @@ void salvarImagemComLegenda(PImage img, String legenda, String caminhoSaida) {
 }
 
 void readDataFromFile() {
-  String filePathP = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_pressao.txt";
-  String filePathT = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_temperatura.txt";
+  //String filePathP = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_pressao.txt";
+  //String filePathT = "/home/avionics/Refri/CompletoRaspRefrigera/Back-End/dados_temperatura.txt";
+
+  String filePathT = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera/Back-End/dados_pressao.txt";
+  String filePathT = "/home/avionics/Refri/ENAER/CompletoRaspRefrigera/Back-End/dados_temperatura.txt";
 
 
   try {
