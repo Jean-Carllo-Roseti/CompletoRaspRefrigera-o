@@ -27,16 +27,16 @@ async def run_script(script_path):
 async def main():
     # Caminhos absolutos para os scripts
     scripts = [
-        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/todos_modulos.py",
-        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/SAeSR.py",
-        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoA.py",
-        r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoB.py",
+        # r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/todos_modulos.py",
+        # r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/SAeSR.py",
+        # r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoA.py",
+        # r"/home/avionics/Refri/CompletoRaspRefrigera/Back-End/GraficoPython/GraficoB.py",
 
         # novo endereço para ENAER
-        # r"/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/todos_modulos.py",
-        # r"/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/SAeSR.py",
-        # r"/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoA.py",
-        # r"/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoB.py",
+        r"/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/todos_modulos.py",
+        r"/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/SAeSR.py",
+        r"/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoA.py",
+        r"/home/avionics/Refri/ENAER/CompletoRaspRefrigera-o/Back-End/GraficoPython/GraficoB.py",
     ]
 
     # Cria tarefas para executar os scripts em paralelo
